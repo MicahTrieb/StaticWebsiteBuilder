@@ -25,7 +25,7 @@ class TextNode:
 				return "IMAGES"
 			case _:
 				raise Exception("Invalid Text Type")
-	def __init__(self, text, text_type, url):
+	def __init__(self, text, text_type, url=""):
 		self.text = text
 		self.url = url
 		self.text_type = text_type
