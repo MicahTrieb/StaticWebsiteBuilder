@@ -53,7 +53,7 @@ class ParentNode(HTMLNode):
 		super().__init__(tag=tag, value=None, children=children, props=props)
 		
 	def to_html(self):
-		appendingString = ''
+		appendingList = []
 		if self.children:
 			if not isinstance(self.tag, str):
 				raise ValueError("Tags must be a string")
@@ -63,8 +63,8 @@ class ParentNode(HTMLNode):
 				if currentChild.children:
 					ParentNode.to_html(currentChild)
 				else:
-					appendingString += ParentNode.to_html(currentChild)
-					return appendingString
+					appendingList.append(ParentNode.to_html(currentChild))
+					return appendingList
 		else:
 		#Starting an empty compliationList to append to later
 			compliationList = []
@@ -89,4 +89,12 @@ class ParentNode(HTMLNode):
 					return (f"<{self.tag} {newString}>{self.value}</{self.tag}>")
 				#Else if the isinstance was skipped, returning just tag wrapping string
 				return f"<{self.tag}>{self.value}</{self.tag}>"			
-		return appendingString
+		newList = []
+		if self.props and self.props != {}:
+			for currentKey in self.props.keys():
+				newList.append(f'{currentKey}="{self.props[currentKey]}"')
+				newStringTwo = " ".join(compliationList)
+			return (f"<{self.tag}{newStringTwo}>")
+		else:
+			appendedList = " ".join(appendingList)
+			return (f"<{self.tag}>{appendingList}</{self.tag}>")
