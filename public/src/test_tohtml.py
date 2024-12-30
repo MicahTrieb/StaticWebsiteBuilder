@@ -32,6 +32,25 @@ class TestLeafNode(unittest.TestCase):
         leaf = LeafNode(tag="h1", value="Title", props={})
         expected_output = "<h1>Title</h1>"
         self.assertEqual(leaf.to_html(), expected_output)
-
+    def test_special_characters_in_value(self):
+        leaf = LeafNode(tag="h1", value="@&^!@#&!TEST", props={2:3})
+        expected_output = '<h1 2="3">@&^!@#&!TEST</h1>'
+        self.assertEqual(leaf.to_html(),expected_output)
+    def test_empty_value_string(self):
+        leaf = LeafNode(tag="a", value="")
+        with self.assertRaises(ValueError):
+            leaf.to_html()
+    def test_special_characters_in_props(self):
+        leaf = LeafNode(tag="a", value="We're testing this huh...",props={"$":3,"#":4})
+        expected_output = '<a $="3" #="4">We\'re testing this huh...</a>'
+        self.assertEqual(leaf.to_html(),expected_output)
+    def test_escaping_text(self):
+        leaf = LeafNode(tag="p", value="a < b && c > d")
+        expected_output = '<p>a < b && c > d</p>'
+        self.assertEqual(leaf.to_html(),expected_output)
+    def test_spaces_or_quotes(self):
+        leaf = LeafNode(tag="a", value="click", props={"title": "my special link"})
+        expected_output = '<a title="my special link">click</a>'
+        self.assertEqual(leaf.to_html(),expected_output)
 if __name__ == "__main__":
     unittest.main()
