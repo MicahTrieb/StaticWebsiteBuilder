@@ -24,14 +24,16 @@ class LeafNode(HTMLNode):
 		super().__init__(tag, value, props,children=None)
 
 	def to_html(self):
-		if not isinstance(self.value, None):
-			if not self.tag or self.tag == "":
-				return self.value
-			if isinstance(self.tag, str):
-				return f"<{self.tag}>{self.value}</{self.tag}>"
-			if isinstance(self.tag, dict):
-				
-				pass
-			
-		raise ValueError("All leaf nodes need a value")
-			
+		compliationList = []
+		if self.value == None:
+			raise ValueError("All leaf nodes need a value")
+		if not self.tag or self.tag == "":
+			return self.value
+		if isinstance(self.tag, str):
+			if isinstance(self.props, dict):
+				for currentKey in self.props.keys():
+					compliationList.append(f'{currentKey}="{self.props[currentKey]}"')
+					
+				newString = " ".join(compliationList)
+				return (f"<{self.tag} {newString}>{self.value}</{self.tag}>")
+			return f"<{self.tag}>{self.value}</{self.tag}>"
