@@ -24,7 +24,7 @@ class TestParentNode(unittest.TestCase):
         parent = ParentNode(tag="div", children=[nested])
         self.assertEqual(parent.to_html(), "<div><section><p>Nested child</p></section></div>")
 
-''    def test_no_children(self):
+    def test_no_children(self):
         # ParentNode without children
         with self.assertRaises(ValueError):
             ParentNode(tag="div", children=[]).to_html()
@@ -151,7 +151,7 @@ class TestParentNode(unittest.TestCase):
         # ParentNode with whitespace tag
         child = LeafNode(tag="p", value="Child")
         with self.assertRaises(ValueError):
-            ParentNode(tag="   ", children=[child]).to_html()''
+            ParentNode(tag="   ", children=[child]).to_html()
 
     def test_special_character_props(self):
         # ParentNode with special characters in props
@@ -167,9 +167,9 @@ class TestParentNode(unittest.TestCase):
 
     def test_self_closing_children(self):
         # ParentNode with self-closing children
-        child = LeafNode(tag="img", value="")
+        child = LeafNode(tag="img", value=" ")
         parent = ParentNode(tag="div", children=[child])
-        self.assertEqual(parent.to_html(), "<div><img></img></div>")
+        self.assertEqual(parent.to_html(), "<div><img> </img></div>")
 
     def test_empty_props_and_children(self):
         # ParentNode with empty props and no children

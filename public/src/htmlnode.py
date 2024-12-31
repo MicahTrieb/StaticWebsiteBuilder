@@ -59,16 +59,20 @@ class ParentNode(HTMLNode):
 			print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) TWO")
 			if not isinstance(self.tag, str):
 				raise ValueError("Tags must be a string")
-			if not self.tag or self.tag == '' or self.tag.strip() == '':
+			if not self.tag or self.tag.strip() == '':
 				raise ValueError("A tag is required for parent nodes")
+			if self.children == None or not isinstance(self.children,list) or self.children == []:
+				raise ValueError("Children are required for every parent node and must be a list")
 			print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE")
 			for currentChild in self.children:
 				if  currentChild.children:
+					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 1-1")
 					appendingList.append(ParentNode.to_html(currentChild))
-					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 1")
+					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 1-2")
 				else:
+					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 2-1")
 					appendingList.append(ParentNode.to_html(currentChild))
-					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 2")
+					print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 2-2")
 		if isinstance(self, LeafNode):
 			print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) FOUR")
 		#Starting an empty compliationList to append to later
@@ -104,10 +108,11 @@ class ParentNode(HTMLNode):
 		if self.props and self.props != {} and not isinstance(self.props,str):
 			print("NINE-1")
 			for currentKey in self.props.keys():
+				returningAppendedList = "".join(appendingList)
 				newList.append(f'{currentKey}="{self.props[currentKey]}"')
 				newStringTwo = "".join(newList)
-			return (f"<{self.tag} {newStringTwo}>{self.value}</{self.tag}>")
-		elif (self.props):
+			return (f"<{self.tag} {newStringTwo}>{returningAppendedList}</{self.tag}>")
+		else:
 			print("NINE-2")
 			appendingList = "".join(appendingList)
 			return (f"<{self.tag}>{appendingList}</{self.tag}>")
