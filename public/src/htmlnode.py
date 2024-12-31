@@ -28,7 +28,7 @@ class LeafNode(HTMLNode):
 		#Starting an empty compliationList to append to later
 		compliationList = []
 		#Making sure the value isn't None or an empty string
-		if self.value == None or self.value == "":
+		if self.value == None:
 			raise ValueError("All leaf nodes need a value")
 		#Returning plain text if the tag is empty or a NoneType
 		if self.tag == None or self.tag == "":
