@@ -1,72 +1,35 @@
 from htmlnode import LeafNode, HTMLNode, ParentNode
 from textnode import *
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    #Empty values being passed checks
-    if delimiter == None or delimiter == "":
-        return old_nodes
-    if text_type == None or text_type == "":
-        raise Exception("Text type is required for delimiter")
-    #Counters for the while loop
-    currentIndex = 0
-    currentCounter = 0
-    boldDetected = 0
-    calculatedIndexList = []
-    splitNodes = list(old_nodes.text)
-    stringNodes = old_nodes.text
-    returnNodeList = []
-    #Checking to see if delimiter was passed as bold
-    if delimiter == "**":
-        while currentIndex < len(splitNodes):
-            #Since we checked if it was a bold delimiter, we can skip over bold vs italic check
-            if stringNodes[currentIndex == delimiter]:
-                print("Definite bold detected")
-                boldDetected = 1
-                if stringNodes[currentIndex + 1] == delimiter:
-                    currentIndex += 2
-                    calculatedIndexList.append(currentIndex)
-                    calculatedIndexList.append(currentIndex + 1)
-                #Checking infront and behind the asterisk to make sure we didn't land on a weird index
-                elif (stringNodes[currentIndex - 1] == delimiter):
-                    currentIndex += 1
-                    calculatedIndexList.append(currentIndex)
-                    calculatedIndexList.append(currentIndex - 1)
-    #Checking all other delimiters, even bold if a single asterisk was passed through
-    else:
-        while currentIndex < len(stringNodes):
-            #iterating through the list to find the index 
-            if stringNodes[currentIndex] == delimiter:
-                #checking to see if it's bold instead of italics
-                if stringNodes[currentIndex + 1] == delimiter and delimiter == "*":
-                    print("Possible BOLD detected")
-                    boldDetected = 1
-                    calculatedIndexList.append(currentIndex)
-                    calculatedIndexList.append(currentIndex + 1)
-                    currentIndex += 2
-                #if it is not bold, adding the index to the list to scan through at the end
-                else:
-                    calculatedIndexList.append(currentIndex)
-                    currentIndex += 1
-            print(calculatedIndexList,stringNodes[currentIndex])
-            currentIndex += 1
-    if len(calculatedIndexList) == 2:
-        returnNodeList.append(TextNode(stringNodes[:(calculatedIndexList[0])],old_nodes.text_type))
-        returnNodeList.append(TextNode("".join(stringNodes[calculatedIndexList[0]:calculatedIndexList[1]]),text_type))
-        returnNodeList.append(TextNode(stringNodes[(calculatedIndexList[1] + 1):],old_nodes.text_type))
-
-        print((stringNodes[(calculatedIndexList[1] + 1):]))
-        print ((stringNodes[:(calculatedIndexList[0])]))
-    if boldDetected == 1 and len(calculatedIndexList) == 4:
-        print(stringNodes[:(min(calculatedIndexList[0],calculatedIndexList[1]))])
-        print(stringNodes[(max(calculatedIndexList[2],calculatedIndexList[3]) + 1):])
-    print (len(calculatedIndexList))
-    print (returnNodeList)
-    return (returnNodeList)
-
-
-
-
-
-
-    
-
+    print(f"These are the old nodes before entering the code: {old_nodes}\n")
+    if not isinstance(old_nodes,list):
+        raise Exception("Old Nodes must be in a list")
+    indexList = []
+    returnList = []
+    for currentNode in old_nodes:
+        print(f"This is the current node in the for loop: {currentNode}\n")
+        if currentNode.text_type != TextType.NORMAL:
+            returnList.append(currentNode)
+        else:
+            for currentIndex in range(0,len(currentNode.text)):
+                if (delimiter == currentNode.text[currentIndex]) and text_type != TextType.BOLD:
+                    print(f"Found it at: {currentIndex}")
+                    indexList.append(currentIndex)
+                elif(delimiter == currentNode.text[currentIndex]) and text_type == TextType.BOLD:
+                    print(f"Found them at: {currentIndex}")
+                    if currentNode.text[currentIndex + 1] == "*":
+                        indexList.append(currentIndex)
+                        indexList.append(currentIndex + 1)
+            if(len(indexList)) == 2:
+                returnList.append(TextNode(f'"{currentNode.text[:indexList[0]]}"',currentNode.text_type))
+                returnList.append(TextNode(f'"{(currentNode.text[indexList[0] + 1:indexList[1]])}"',text_type))
+                returnList.append(TextNode(f'"{(currentNode.text[indexList[1] + 1:])}"',currentNode.text_type))
+            elif(len(indexList)) > 2:
+                #Note for future, this is meant to index and append the bolded indexes  
+                
+            indexList = []
+        print (returnList)
+        print("Made it")
+    print (f"Final return list: {returnList}")
+    return returnList
     
