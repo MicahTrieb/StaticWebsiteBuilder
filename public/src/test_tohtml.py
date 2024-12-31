@@ -38,8 +38,7 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(leaf.to_html(),expected_output)
     def test_empty_value_string(self):
         leaf = LeafNode(tag="a", value="")
-        with self.assertRaises(ValueError):
-            leaf.to_html()
+        self.assertEqual(leaf.to_html(),"<a></a>")
     def test_special_characters_in_props(self):
         leaf = LeafNode(tag="a", value="We're testing this huh...",props={"$":3,"#":4})
         expected_output = '<a $="3" #="4">We\'re testing this huh...</a>'
