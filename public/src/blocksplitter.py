@@ -11,40 +11,42 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     indexList = []
     returnList = []
     nestingList = []
-    nesting = 0
     for currentNode in old_nodes:
         print(f"This is the current node in the for loop: {currentNode}\n")
+        print(f"This is the current text of the node: {currentNode.text}\n")
         if currentNode.text_type != TextType.NORMAL:
             returnList.append(currentNode)
         else:
             for currentIndex in range(0,len(currentNode.text)):
                 if (delimiter == currentNode.text[currentIndex]) and text_type != TextType.BOLD:
-                    if text_type != TextType.BOLD:
-                        print(f"Found it at: {currentIndex}")
-                        if currentNode.text[currentIndex +1] == delimiter:
+                    print(f"Found {currentNode.text[currentIndex]} at: {currentIndex}")
+                    if currentIndex + 1 < len(currentNode.text):
+                        if currentNode.text[currentIndex + 1] == delimiter:
                             print(f"Nesting detected at: {currentIndex} and {currentIndex + 1}, changing variable \n")
-                            nesting += 1
                             if currentIndex in nestingList:
                                 nestingList.append(currentIndex + 1)
+                                continue
                             else:
                                 nestingList.extend([
                                     currentIndex, currentIndex + 1
                                 ])
-                            continue
+                                continue
+                    if currentNode.text[currentIndex - 1] != delimiter:
                         indexList.append(currentIndex)
                 elif(delimiter == currentNode.text[currentIndex]) and text_type == TextType.BOLD:
                     print(f"Found them at: {currentIndex}")
                     if currentNode.text[currentIndex + 1] == "*":
                         indexList.append(currentIndex)
             if(nestingList):
-                print(nestingList)
-                returnList.extend(
-                    [
-                        "nesting discovered"
-                    ]
-                )
-                while nesting > 0:
-                    nesting -= 1
+                print(f"This is the nesting list: {nestingList}\n")
+                print(f"This is the index list: {indexList}\n")
+                while nestingList:
+                    currentPopList = [nestingList.pop(0),nestingList.pop(-1)]
+                    returnList.extend(
+                        [
+                            currentPopList
+                        ]
+                    )
             elif(len(indexList)) == 2 and delimiter != "*":
                 returnList.append(
                     TextNode(f'"{currentNode.text[:indexList[0]]}"',currentNode.text_type))
