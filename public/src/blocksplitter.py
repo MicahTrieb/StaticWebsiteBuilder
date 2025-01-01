@@ -1,5 +1,22 @@
 from htmlnode import LeafNode, HTMLNode, ParentNode
 from textnode import *
+
+def nesting_split_function(nestingList, indexList, theNode, text_type, currentReturnList):
+    if not isinstance(nestingList, list) or not isinstance(indexList, list):
+        raise Exception("The nesting list or the index list were not a list type")
+    if nestingList and indexList:
+        print(f"This is the nesting list: {nestingList}\n")
+        print(f"This is the index list: {indexList}\n")
+        if min(indexList[0],nestingList[0]) == indexList[0]:
+            print (f"This functionality worked. Returning the first value between {indexList[0]} and {nestingList[0]}, which is {indexList[0]}")
+            
+        elif min(indexList[0],nestingList[0]) == nestingList[0]:
+            print (f"This functionality worked. Returning the first value between {indexList[0]} and {nestingList[0]}, which is {nestingList[0]}")
+        elif min(indexList[0],nestingList[0]) == nestingList[0] and min(indexList[0],nestingList[0]) == indexList[0]:
+            raise Exception("Something terrible happened, index and nesting lists overlapped")
+    pass
+
+
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     print(f"These are the old nodes before entering the code: {old_nodes}\n")
     if delimiter == None or delimiter == "":
@@ -38,15 +55,16 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     if currentNode.text[currentIndex + 1] == "*":
                         indexList.append(currentIndex)
             if(nestingList):
+                nesting_split_function(nestingList, indexList, currentNode, text_type, returnList)
                 print(f"This is the nesting list: {nestingList}\n")
                 print(f"This is the index list: {indexList}\n")
-                while nestingList:
-                    currentPopList = [nestingList.pop(0),nestingList.pop(-1)]
-                    returnList.extend(
-                        [
-                            currentPopList
-                        ]
-                    )
+                if min(indexList[0],nestingList[0]) == indexList[0]:
+                    print (f"This functionality worked. Returning the first value between {indexList[0]} and {nestingList[0]}, which is {indexList[0]}")
+
+                elif min(indexList[0],nestingList[0]) == nestingList[0]:
+                    print (f"This functionality worked. Returning the first value between {indexList[0]} and {nestingList[0]}, which is {nestingList[0]}")
+                elif min(indexList[0],nestingList[0]) == nestingList[0] and min(indexList[0],nestingList[0]) == indexList[0]:
+                    raise Exception("Something terrible happened, index and nesting lists overlapped")
             elif(len(indexList)) == 2 and delimiter != "*":
                 returnList.append(
                     TextNode(f'"{currentNode.text[:indexList[0]]}"',currentNode.text_type))
