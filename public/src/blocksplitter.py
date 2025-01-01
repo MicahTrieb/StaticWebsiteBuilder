@@ -45,7 +45,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                         TextNode(f'"{currentNode.text[0]}"',text_type)
                     )
                 for currentIndex in range (0, len(splitList)):
-                    if splitList[0][0] == 0:
+                    if splitList[currentIndex][0] == 0:
                         continue
                     if currentIndex + 1 < len(splitList):
                         nextStopValue = (splitList[currentIndex + 1][0])
@@ -54,14 +54,14 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                             TextNode(f'"{currentNode.text[splitList[currentIndex][0] + 1:splitList[currentIndex][1]]}"',text_type),
                             TextNode(f'"{currentNode.text[splitList[currentIndex][1]+1:nextStopValue]}"',currentNode.text_type)
                         ])
-                        print("This was one iteration of the nextCurrentIndex code\n")
-                        for i in returnList:
+                        print("This was one iteration of the nextCurrentIndex code\n",)
+                        lastStop = nextStopValue
+                        for i in returnList:    
                             print(f"{i}\n")
                     else:
                         returnList.extend([
-                        TextNode(f'"{currentNode.text[:currentIndex][0]}"',currentNode.text_type),
-                        TextNode(f'"{(currentNode.text[indexList[0] + 1:indexList[1]])}"',text_type),
-                        TextNode(f'"{(currentNode.text[indexList[1] + 1:])}"',currentNode.text_type)
+                            TextNode(f'"{currentNode.text[splitList[currentIndex][0] + 1:splitList[currentIndex][1]]}"',text_type),
+                            TextNode(f'"{currentNode.text[splitList[currentIndex][1] + 1]:}"',currentNode.text_type)
                     ])
                         print ("This was one iteration of the nextCurrentIndex's bypass code\n")
                         for i in returnList:
@@ -72,7 +72,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 
             indexList = []
         print (returnList)
-        print("Made it")
+        #print("Made it")
     for i in returnList:
         print(f"{i}\n")
     return returnList
