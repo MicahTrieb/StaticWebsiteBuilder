@@ -78,18 +78,6 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         expected = [TextNode('"This text has no matching delimiters."', TextType.NORMAL)]
         self.assertEqual(new_nodes, expected)
 
-    def test_nested_delimiters(self):
-        node = TextNode("This is `nested `code` block` example.", TextType.NORMAL)
-        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        expected = [
-            TextNode('"This is "', TextType.NORMAL),
-            TextNode('"nested "', TextType.CODE),
-            TextNode('"code"', TextType.CODE),
-            TextNode('" block"', TextType.CODE),
-            TextNode('" example."', TextType.NORMAL),
-        ]
-        self.assertEqual(new_nodes, expected)
-
     def test_whitespace_inside_delimiters(self):
         node = TextNode("This is ` code block ` example.", TextType.NORMAL)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)

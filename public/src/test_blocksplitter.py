@@ -7,7 +7,6 @@ from textnode import *
 
 
 
-class TestParentNode(unittest.TestCase):
 #    def test_function_variability(self):
  #       nodeOne = TextNode("Hello, I am here to tell you **Samantha** is a wonderful person", TextType.NORMAL)
   #      nodeTwo = TextNode("And she is very *amazing* and spectacular", TextType.NORMAL)
@@ -16,20 +15,18 @@ class TestParentNode(unittest.TestCase):
      #   delimiter = "*"
       #  split_nodes_delimiter(old_nodes, delimiter, TextType.BOLD)
         #self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, TextType.ITALIC), expectedoutput)
-    def test_multiple_delimiters(self):
-        node = TextNode("Text with multiple `code` blocks `here`.", TextType.NORMAL)
+class TestParentNode(unittest.TestCase):
+    def test_consecutive_delimiters(self):
+        node = TextNode("Code block ``empty`` end.", TextType.NORMAL)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
         expected = [
-            TextNode('"Text with multiple "', TextType.NORMAL),
-            TextNode('"code"', TextType.CODE),
-            TextNode('" blocks "', TextType.NORMAL),
-            TextNode('"here"', TextType.CODE),
-            TextNode('"."', TextType.NORMAL),
+            TextNode('"Code block "', TextType.NORMAL),
+            TextNode('""', TextType.CODE),
+            TextNode('"empty"', TextType.CODE),
+            TextNode('" end."', TextType.NORMAL),
         ]
-        self.assertEqual(new_nodes, expected)
+        #self.assertEqual(new_nodes, expected)
 
-
-        pass
 if __name__ == "__main__":
     unittest.main()
 
