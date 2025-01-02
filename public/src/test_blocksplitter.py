@@ -17,13 +17,21 @@ from textnode import *
         #self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, TextType.ITALIC), expectedoutput)
 class TestParentNode(unittest.TestCase):
     def test_consecutive_delimiters(self):
-        node = TextNode("Let's add a code block prior to the `nesting` code block ``empty`` end and new `beginnings` and to even better `shenanigans`", TextType.NORMAL)
+        node = TextNode(
+            "Let's add a code block prior to the `nesting` code block ``empty`` end and new `beginnings` and to even better `shenanigans`",
+            TextType.NORMAL,
+        )
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
         expected = [
-            TextNode('"Code block "', TextType.NORMAL),
+            TextNode('"Let\'s add a code block prior to the "', TextType.NORMAL),
+            TextNode('"nesting"', TextType.CODE),
+            TextNode('" code block "', TextType.NORMAL),
             TextNode('""', TextType.CODE),
             TextNode('"empty"', TextType.CODE),
-            TextNode('" end."', TextType.NORMAL),
+            TextNode('" end and new "', TextType.NORMAL),
+            TextNode('"beginnings"', TextType.CODE),
+            TextNode('" and to even better "', TextType.NORMAL),
+            TextNode('"shenanigans"', TextType.CODE),
         ]
         #self.assertEqual(new_nodes, expected)
 
