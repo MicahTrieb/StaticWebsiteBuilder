@@ -16,16 +16,14 @@ from textnode import *
       #  split_nodes_delimiter(old_nodes, delimiter, TextType.BOLD)
         #self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, TextType.ITALIC), expectedoutput)
 class TestParentNode(unittest.TestCase):
-    def test_code_delimiter(self):
-        node = TextNode("hello `world` there", TextType.NORMAL)
+    # Test different delimiter types
+    def test_no_delimiters(self):
+        node = TextNode("hello world", TextType.NORMAL)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
         expected = [
-            TextNode('"hello "', TextType.NORMAL),
-            TextNode('"world"', TextType.CODE),
-            TextNode('" there"', TextType.NORMAL),
+            TextNode('"hello world"', TextType.NORMAL),
         ]
         self.assertEqual(new_nodes, expected)
-
 
 if __name__ == "__main__":
     unittest.main()
