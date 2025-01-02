@@ -28,8 +28,9 @@ def nesting_split_function(nestingList, indexList, theNode, text_type, currentRe
             poppedList = nestingList[:2]
             print(f"This is the popped nesting list: {poppedList}")
             nestingList = nestingList[2:]
+            #Note for future, this is meant to combat empty nesting
             currentReturnList.extend([
-                    
+
             ])
         elif min(indexList[0],nestingList[0]) == nestingList[0] and min(indexList[0],nestingList[0]) == indexList[0]:
             raise Exception("Something terrible happened, index and nesting lists overlapped")
