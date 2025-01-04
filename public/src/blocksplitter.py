@@ -106,15 +106,16 @@ def split_nodes_image(old_nodes):
         print(currentNode)
         print (extract_markdown_images(currentNode.text))
         regexedImages = extract_markdown_images(currentNode.text)
-        for currentImageRegex in regexedImages:
-            regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
+        if regexedImages:
+            for currentImageRegex in regexedImages:
+                regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
         print (regexDictionary)
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
         matchList = []
         for match in re.finditer("\[([^\]]+)\]", currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
-        for match in re.finditer(("[\w\s]+(?=\!)"), currentNode.text):
+        for match in re.finditer(("[\w\s]+(?=\!|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         print(f"Current match list: {matchList}\n")
@@ -129,9 +130,9 @@ def split_nodes_image(old_nodes):
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
         print (matchList)
-        
-        return(textList)
-
+        returnList.append(textList)
+        textList = []
+    return returnList
 def split_nodes_link(old_nodes):
     returnList = []
     for currentNode in old_nodes:
@@ -141,15 +142,17 @@ def split_nodes_link(old_nodes):
         print(currentNode)
         print (extract_markdown_link(currentNode.text))
         regexedImages = extract_markdown_link(currentNode.text)
-        for currentImageRegex in regexedImages:
-            regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
-        print (regexDictionary)
+        if regexedImages:
+            for currentImageRegex in regexedImages:
+                regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
+                print (regexDictionary)
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
         matchList = []
         for match in re.finditer("\[([^\]]+)\]", currentNode.text):
             matchList.append((match.start(), match.group(0), 'link'))
-        for match in re.finditer(("[\w\s]+(?=\!)"), currentNode.text):
+            #NOTE TO SELF, FIX THIS, IT SKIPS ANYTHING AFTER THE LAST LINK
+        for match in re.finditer(("[\w\s]+(?=\[|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         print(f"Current match list: {matchList}\n")
@@ -164,5 +167,7 @@ def split_nodes_link(old_nodes):
                     TextNode(dictionaryIndexer, TextType.LINKS, regexDictionary[dictionaryIndexer])
                 ])
         print (matchList)
-        
-        return(textList)
+        print (f"Final return list: {textList}")
+        returnList.append(textList)
+        textList = []
+    return returnList
