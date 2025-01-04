@@ -1,5 +1,7 @@
 from htmlnode import LeafNode, HTMLNode, ParentNode
 from textnode import *
+from regexfunction import extract_markdown_images, extract_markdown_link
+import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     print(f"These are the old nodes before entering the code: {old_nodes}\n")
@@ -95,3 +97,29 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     for i in returnList:
                         print(f"{i}\n")
             return returnList
+def split_nodes_image(old_nodes):
+    returnList = []
+    for currentNode in old_nodes:
+        textList = []
+        regexedList = []
+        print(currentNode)
+        print (extract_markdown_images(currentNode.text))
+        regexedImages = extract_markdown_images(currentNode.text)
+        preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
+        print (preLinkRegexed)
+        for currentRegexPreLink in preLinkRegexed:
+            textList.extend([
+                TextNode(currentRegexPreLink, TextType.NORMAL)
+            ])
+        for currentRegexLink in regexedImages:
+            regexedList.extend([
+                TextNode(currentRegexLink[0], TextType.IMAGES, currentRegexLink[1])
+            ])
+        print (regexedList)
+        print (textList)
+        #linkTextRegexed = re.findall(r"\[([^\]]+)\]",old_nodes.text)
+        #linkRegexed = re.findall(r"\(([^\)]+)\)",old_nodes.text)
+
+
+def split_nodes_link(old_nodes):
+    pass
