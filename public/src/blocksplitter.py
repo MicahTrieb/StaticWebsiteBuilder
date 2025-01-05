@@ -113,19 +113,21 @@ def split_nodes_image(old_nodes):
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
         matchList = []
-        for match in re.finditer("\[([^\]]+)\]", currentNode.text):
+        for match in re.finditer((r"\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
-        for match in re.finditer(("[\w\s]+(?=\!|$)"), currentNode.text):
+        for match in re.finditer((r"[\w\s]+(?=\!|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
-            if currentMatch[2] == 'text':
+            if currentMatch[2] == 'text' and currentMatch[1]:
                 textList.extend([
                     TextNode(currentMatch[1], TextType.NORMAL)
                 ])
-            if currentMatch[2] == 'image':
+            if currentMatch[2] == 'image' and currentMatch[1]:
                 dictionaryIndexer = currentMatch[1].strip("[]")
+                print (f"Regex dictionary here: {regexDictionary}")
+                
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
@@ -149,19 +151,19 @@ def split_nodes_link(old_nodes):
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
         matchList = []
-        for match in re.finditer("\[([^\]]+)\]", currentNode.text):
+        for match in re.finditer((r"\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'link'))
             #NOTE TO SELF, FIX THIS, IT SKIPS ANYTHING AFTER THE LAST LINK
-        for match in re.finditer(("[\w\s]+(?=\[|$)"), currentNode.text):
+        for match in re.finditer((r"[\w\s]+(?=\[|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
-            if currentMatch[2] == 'text':
+            if currentMatch[2] == 'text' and currentMatch[1].strip():
                 textList.extend([
                     TextNode(currentMatch[1], TextType.NORMAL)
                 ])
-            if currentMatch[2] == 'link':
+            if currentMatch[2] == 'link' and currentMatch[1].strip():
                 dictionaryIndexer = currentMatch[1].strip("[]")
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.LINKS, regexDictionary[dictionaryIndexer])
@@ -171,3 +173,8 @@ def split_nodes_link(old_nodes):
         returnList.append(textList)
         textList = []
     return returnList
+
+def text_to_textnodes(text):
+    parsingTextNode = [TextNode(text, TextType.NORMAL)]
+    print (split_nodes_image(parsingTextNode))
+    print (split_nodes_link(parsingTextNode))
