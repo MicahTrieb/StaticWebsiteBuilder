@@ -15,7 +15,7 @@ class testRegex(unittest.TestCase):
 
     def test_notaTest_(self):
         rickRoll = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
-        print(extract_markdown_images(rickRoll))    
+        #print(extract_markdown_images(rickRoll))    
 if __name__ == "__main__":
     unittest.main()
     
