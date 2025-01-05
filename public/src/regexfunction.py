@@ -6,14 +6,17 @@ def extract_markdown_images(text):
     #matches = re.findall(r"!\[([^\]]+)\]", text)
     #otherMatches = re.findall(r"\(([^\)]+)\)", text)
     matches = re.findall(r"!\[([^\]]+)\]\(([^\)]+)\)", text)
-    print(f"Post regex matches: {matches}")
+    print(f"Post regex matches: {matches}\n\n")
     #while matches and otherMatches:
-    for match in matches:
-        print (match)
+    while matches:
+        print (f"Popping {matches[0]} off of {matches}\n\n")
+        poppedMatches = matches.pop(0)
+        print (f"{poppedMatches} successfully popped, leaving {matches}\n\n")
         returnList.append(
-            (match[0],
-            match[1])
+            (poppedMatches[0],
+            poppedMatches[1])
         )
+        print (f"Post popping and appending, resulting in {returnList}\n\n")
         
     return returnList
 def extract_markdown_link(text):

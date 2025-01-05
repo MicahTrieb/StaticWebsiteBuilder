@@ -5,8 +5,8 @@ import unittest
 
 class testRegex(unittest.TestCase):
     def test_rickAstley(self):
-        rickRoll = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
-        expectedOutcome = [
+        rickRoll = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) and a false [link](www.pleasedontreturnthis.com)"
+        expectedOutcome = [ 
             ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
             ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")
 ]
