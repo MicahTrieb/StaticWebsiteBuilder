@@ -117,6 +117,8 @@ def split_nodes_image(old_nodes):
             matchList.append((match.start(), match.group(0), 'image'))
         for match in re.finditer((r"([\w\s*`]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
+        for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
+            matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
@@ -134,21 +136,23 @@ def split_nodes_image(old_nodes):
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
         print (matchList)
-        returnList.append(textList)
+        returnList.extend(textList)
         textList = []
+        regexDictionary = {}
     return returnList
 def split_nodes_link(old_nodes):
     returnList = []
+    print (old_nodes)
     for currentNode in old_nodes:
+        print (type(currentNode))
         textList = []
         regexedList = []
         regexDictionary = {}
         print(currentNode)
-        print (extract_markdown_link(currentNode.text))
-        regexedImages = extract_markdown_link(currentNode.text)
-        if regexedImages:
-            for currentImageRegex in regexedImages:
-                regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
+        regexedLinks = extract_markdown_link(currentNode.text)
+        if regexedLinks:
+            for currentLinkRegex in regexedLinks:
+                regexDictionary[currentLinkRegex[0]] = currentLinkRegex[1]
                 print (regexDictionary)
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
@@ -175,9 +179,15 @@ def split_nodes_link(old_nodes):
         textList = []
     return returnList
 
+def simple_printer(old_nodes):
+    for currentNode in old_nodes:
+        print (f"{currentNode}\n")
 def text_to_textnodes(text):
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
     print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
     returnNodes = (split_nodes_image(parsingTextNode))
-    print (f"RETURN NODE HERE: {returnNodes}\n\n\n")
+    print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
+    simple_printer(returnNodes)
+    #returnNodes = (split_nodes_link(returnNodes))
+    #print (f"POST LINK SEPERATION: {returnNodes}\n\n\n")
     #print (split_nodes_link(returnNodes))
