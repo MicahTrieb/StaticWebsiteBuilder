@@ -38,29 +38,29 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     if currentNode.text[currentIndex + 1] == "*":
                         indexList.append(currentIndex)
             if(indexList == []):
-                returnList.append(TextNode(f'"{currentNode.text}"',currentNode.text_type))
+                returnList.append(TextNode(f'{currentNode.text}',currentNode.text_type))
             if(len(indexList)) % 2 != 0:
                 raise Exception("Unmatched delimiters") 
             elif(len(indexList)) == 2 and text_type != TextType.BOLD:
                 print("Not bold\n")
                 returnList.append(
-                    TextNode(f'"{currentNode.text[:indexList[0]]}"',currentNode.text_type))
+                    TextNode(f'{currentNode.text[:indexList[0]]}',currentNode.text_type))
                 returnList.append(
-                    TextNode(f'"{(currentNode.text[indexList[0] + 1:indexList[1]])}"',text_type))
+                    TextNode(f'{(currentNode.text[indexList[0] + 1:indexList[1]])}',text_type))
                 returnList.append(
-                    TextNode(f'"{(currentNode.text[indexList[1] + 1:])}"',currentNode.text_type))
+                    TextNode(f'{(currentNode.text[indexList[1] + 1:])}',currentNode.text_type))
                 
                 indexList = []
             #Making sure the delimiter was an asterisk, and that it was looking for bold
-            elif (delimiter == "**" or delimiter == "*") and text_type == TextType.BOLD:
+            elif (delimiter == "*") and text_type == TextType.BOLD and indexList:
                 print("Index list: ", indexList)
                 print("\nBold")
                 returnList.append(
-                    TextNode(f'"{currentNode.text[:indexList[0]]}"',currentNode.text_type))
+                    TextNode(f'{currentNode.text[:indexList[0]]}',currentNode.text_type))
                 returnList.append(
-                    TextNode(f'"{(currentNode.text[indexList[0] + 2:indexList[1]])}"',text_type))
+                    TextNode(f'{(currentNode.text[indexList[0] + 2:indexList[1]])}',text_type))
                 returnList.append(
-                    TextNode(f'"{(currentNode.text[indexList[1] + 2:])}"',currentNode.text_type))  
+                    TextNode(f'{(currentNode.text[indexList[1] + 2:])}',currentNode.text_type))  
                 print (f"Return List: {returnList}\n")
                 indexList = []
             #Checking to see if the function picked up multiple copies, if so, makes sure they have pairs
@@ -68,7 +68,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 splitList = [indexList[i:i+2] for i in range(0, len(indexList), 2)]
                 if splitList[0][0] == 0:
                     returnList.append(
-                        TextNode(f'"{currentNode.text[0]}"',text_type)
+                        TextNode(f'{currentNode.text[0]}',text_type)
                     )
                 for currentIndex in range (0, len(splitList)):
                     if splitList[currentIndex][0] == 0:
@@ -76,9 +76,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     if currentIndex + 1 < len(splitList):
                         nextStopValue = (splitList[currentIndex + 1][0])
                         returnList.extend([
-                            TextNode(f'"{currentNode.text[:splitList[currentIndex][0]]}"',currentNode.text_type),
-                            TextNode(f'"{currentNode.text[splitList[currentIndex][0] + 1:splitList[currentIndex][1]]}"',text_type),
-                            TextNode(f'"{currentNode.text[splitList[currentIndex][1]+1:nextStopValue]}"',currentNode.text_type)
+                            TextNode(f'{currentNode.text[:splitList[currentIndex][0]]}',currentNode.text_type),
+                            TextNode(f'{currentNode.text[splitList[currentIndex][0] + 1:splitList[currentIndex][1]]}',text_type),
+                            TextNode(f'{currentNode.text[splitList[currentIndex][1]+1:nextStopValue]}',currentNode.text_type)
                         ])
                         print(f"This was one iteration of the nextCurrentIndex code: {returnList}\n",)
                         lastStop = nextStopValue
@@ -87,11 +87,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     else:#(splitList[currentIndex]):
                         try:
                             returnList.extend([
-                                TextNode(f'"{currentNode.text[splitList[currentIndex][0]+1:splitList[currentIndex][1]]}"',text_type),
-                                TextNode(f'"{currentNode.text[splitList[currentIndex][1]+1]:}"',currentNode.text_type)])
+                                TextNode(f'{currentNode.text[splitList[currentIndex][0]+1:splitList[currentIndex][1]]}',text_type),
+                                TextNode(f'{currentNode.text[splitList[currentIndex][1]+1]:}',currentNode.text_type)])
                         except:
                             returnList.extend([
-                                TextNode(f'"{currentNode.text[splitList[currentIndex][0]+1:splitList[currentIndex][1]]}"',text_type),
+                                TextNode(f'{currentNode.text[splitList[currentIndex][0]+1:splitList[currentIndex][1]]}',text_type),
                             ])
            
                     for i in returnList:
@@ -115,7 +115,7 @@ def split_nodes_image(old_nodes):
         matchList = []
         for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
-        for match in re.finditer((r"([\w\s*`]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)"), currentNode.text):
+        for match in re.finditer((r"([\w\s*`.]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
@@ -160,7 +160,7 @@ def split_nodes_link(old_nodes):
         matchList = []
         for match in re.finditer((r"\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'link'))
-        for match in re.finditer((r"[\w\s]+(?=\[|$)"), currentNode.text):
+        for match in re.finditer((r"[\w\s.]+(?=\[|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
         # print(f"Current match list: {matchList}\n")
@@ -193,19 +193,21 @@ def simple_parser(old_nodes):
     return (returnList)
 
 def text_to_textnodes(text):
+    if not text:
+        return []
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
-    # print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
-    returnNodes = (split_nodes_image(parsingTextNode))
-    # print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
-    returnNodes = simple_parser(returnNodes)
+    print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
+    if (split_nodes_image(parsingTextNode)):
+        returnNodes = split_nodes_image(parsingTextNode)
+    else:
+        returnNodes = parsingTextNode
+    print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
+    if simple_parser(returnNodes):
+        returnNodes = simple_parser(returnNodes)
+
     print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
     runningList = []
-    currentContent = split_nodes_delimiter(returnNodes, "`", TextType.CODE)
-    currentContent = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)
-    currentContent = split_nodes_delimiter(currentContent, "*", TextType.BOLD)
-    for i in currentContent:
-        print(currentContent)
-    #simple_printer(returnNodes)
-    #returnNodes = (split_nodes_link(returnNodes))
-    #print (f"POST LINK SEPERATION: {returnNodes}\n\n\n")
-    #print (split_nodes_link(returnNodes))
+    currentContent = split_nodes_delimiter(returnNodes, "*", TextType.BOLD)
+    newList = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)
+    newList2 = split_nodes_delimiter(newList, "`", TextType.CODE)
+    return newList2
