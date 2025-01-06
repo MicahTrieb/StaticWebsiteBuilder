@@ -113,7 +113,7 @@ def split_nodes_image(old_nodes):
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
         print (preLinkRegexed)
         matchList = []
-        for match in re.finditer((r"!\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
+        for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
         for match in re.finditer((r"([\w\s*`]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
@@ -128,7 +128,7 @@ def split_nodes_image(old_nodes):
                     TextNode(currentMatch[1], TextType.NORMAL)
                 ])
             if currentMatch[2] == 'image' and currentMatch[1]:
-                dictionaryIndexer = currentMatch[1].strip("[]")
+                dictionaryIndexer = currentMatch[1].strip("![]")
                 
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
