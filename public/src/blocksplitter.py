@@ -96,22 +96,22 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
            
                     for i in returnList:
                         print(f"{i}\n")
-            return returnList
+    return returnList
 def split_nodes_image(old_nodes):
     returnList = []
     for currentNode in old_nodes:
         textList = []
         regexedList = []
         regexDictionary = {}
-        print(currentNode)
-        print (extract_markdown_images(currentNode.text))
+        # print(currentNode)
+        # print (extract_markdown_images(currentNode.text))
         regexedImages = extract_markdown_images(currentNode.text)
         if regexedImages:
             for currentImageRegex in regexedImages:
                 regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
-        print (regexDictionary)
+        # print (regexDictionary)
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
-        print (preLinkRegexed)
+        # print (preLinkRegexed)
         matchList = []
         for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
@@ -120,11 +120,11 @@ def split_nodes_image(old_nodes):
         for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
-        print(f"Current match list: {matchList}\n")
+        # print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
-            print(f"Current match here: {currentMatch}\n")
-            print (f"Regex dictionary here: {regexDictionary}\n")
-            print (f"Full match list here: {matchList}\n")
+            # print(f"Current match here: {currentMatch}\n")
+            # print (f"Regex dictionary here: {regexDictionary}\n")
+            # print (f"Full match list here: {matchList}\n")
             if currentMatch[2] == 'text' and currentMatch[1]:
                 textList.extend([
                     TextNode(currentMatch[1], TextType.NORMAL)
@@ -135,34 +135,35 @@ def split_nodes_image(old_nodes):
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
-        print (matchList)
+        # print (matchList)
         returnList.extend(textList)
         textList = []
         regexDictionary = {}
     return returnList
+
 def split_nodes_link(old_nodes):
     returnList = []
-    print (old_nodes)
+    # print (old_nodes)
     for currentNode in old_nodes:
-        print (type(currentNode))
+        # print (type(currentNode))
         textList = []
         regexedList = []
         regexDictionary = {}
-        print(currentNode)
+        # print(currentNode)
         regexedLinks = extract_markdown_link(currentNode.text)
         if regexedLinks:
             for currentLinkRegex in regexedLinks:
                 regexDictionary[currentLinkRegex[0]] = currentLinkRegex[1]
-                print (regexDictionary)
+                # print (regexDictionary)
         preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
-        print (preLinkRegexed)
+        # print (preLinkRegexed)
         matchList = []
         for match in re.finditer((r"\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'link'))
         for match in re.finditer((r"[\w\s]+(?=\[|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
-        print(f"Current match list: {matchList}\n")
+        # print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
             if currentMatch[2] == 'text' and currentMatch[1].strip():
                 textList.extend([
@@ -173,21 +174,38 @@ def split_nodes_link(old_nodes):
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.LINKS, regexDictionary[dictionaryIndexer])
                 ])
-        print (matchList)
-        print (f"Final return list: {textList}")
+        # print (matchList)
+        # print (f"Final return list: {textList}")
         returnList.append(textList)
         textList = []
     return returnList
 
-def simple_printer(old_nodes):
+def simple_parser(old_nodes):
+    returnList = []
     for currentNode in old_nodes:
-        print (f"{currentNode}\n")
+
+        # print (f"{currentNode}\n")
+        if(extract_markdown_link(currentNode.text)):
+            currentExtract = extract_markdown_link(currentNode.text)
+            returnList.extend([TextNode(currentExtract[0][0], TextType.LINKS, currentExtract[0][1])])
+        else:
+            returnList.extend([currentNode])
+    return (returnList)
+
 def text_to_textnodes(text):
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
-    print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
+    # print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
     returnNodes = (split_nodes_image(parsingTextNode))
-    print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
-    simple_printer(returnNodes)
+    # print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
+    returnNodes = simple_parser(returnNodes)
+    print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
+    runningList = []
+    currentContent = split_nodes_delimiter(returnNodes, "`", TextType.CODE)
+    currentContent = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)
+    currentContent = split_nodes_delimiter(currentContent, "*", TextType.BOLD)
+    for i in currentContent:
+        print(currentContent)
+    #simple_printer(returnNodes)
     #returnNodes = (split_nodes_link(returnNodes))
     #print (f"POST LINK SEPERATION: {returnNodes}\n\n\n")
     #print (split_nodes_link(returnNodes))
