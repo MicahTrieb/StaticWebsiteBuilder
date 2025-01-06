@@ -5,7 +5,7 @@ from blocksplitter import text_to_textnodes, split_nodes_delimiter, split_nodes_
 
 class test_fullTesting(unittest.TestCase):
     def test_basicString(self):
-        textString = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        textString = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev) and a second image ![here](www.currentimage.com)"
         text_to_textnodes(textString)
 
 if __name__ == "__main__":
