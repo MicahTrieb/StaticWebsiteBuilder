@@ -176,7 +176,7 @@ def split_nodes_link(old_nodes):
                 ])
         # print (matchList)
         # print (f"Final return list: {textList}")
-        returnList.append(textList)
+        returnList.extend(textList)
         textList = []
     return returnList
 
