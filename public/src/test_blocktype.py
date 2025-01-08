@@ -11,5 +11,9 @@ class blockType(unittest.TestCase):
         inputText = "This is a normal block of text"
         testFunction = block_to_blocktype(inputText)
         self.assertEqual(testFunction, "normal")
+    def test_unsortedList(self):
+        inputText = "* This is a pseudo\n* unsorted list that \n* will hopefully be returned "
+        testFunction = block_to_blocktype(inputText)
+        self.assertEqual(testFunction, "unsorted list")
 if __name__ == "__main__":
     unittest.main()
