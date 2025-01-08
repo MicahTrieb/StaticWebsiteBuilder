@@ -12,15 +12,22 @@ def block_to_blocktype(inputBlock):
     codeBlock2 = re.findall(r"`{3}(?=$)", inputBlock)
     if(codeBlock1 and codeBlock2):
         return "code"
-    unsortedLines = inputBlock.split("\n")
-    counter = 0
+    if inputBlock:
+        unsortedLines = inputBlock.split("\n")
     if(unsortedLines):
+        counter = 0
         for currentLine in unsortedLines:
             currentList = [(re.findall(r"^\-(?= )", currentLine)), (re.findall(r"^\*(?= )", currentLine))]
             if currentList[0] or currentList[1]:
                 counter += 1
-    if counter == len(unsortedLines):
+    if counter == len(unsortedLines) and unsortedLines:
         return "unsorted list"
-
+    if(unsortedLines) and re.findall(r"^>", inputBlock):
+        counter = 0
+        for currentLine in unsortedLines:
+            currentList = [re.findall(r"^>", currentLine)]
+            counter += 1
+        if counter == len(unsortedLines) and unsortedLines:
+            return "quote block"
     else:
         return "normal"
