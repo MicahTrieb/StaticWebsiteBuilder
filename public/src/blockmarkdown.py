@@ -1,5 +1,5 @@
 import re
-
+from htmlnode import HTMLNode, LeafNode, ParentNode
 def markdown_to_blocks(inputString):
     return [block.strip() for  block in inputString.split("\n\n")]
 
@@ -32,11 +32,13 @@ def block_to_blocktype(inputBlock):
             counter = 1
             for currentLine in unsortedLines:
                 if re.search(rf"^{counter}\. ", currentLine):
-                    print (currentLine)
+                    #print (currentLine)
                     counter +=1 
                 if counter == len(unsortedLines) - 1 and unsortedLines:
                     return ("sorted list")
-            
-
-    
     return "normal"
+
+def markdown_to_html_node(markdown):
+    blockedOut = markdown_to_blocks(markdown)
+    for currentBlock in blockedOut:
+        print(block_to_blocktype(currentBlock))
