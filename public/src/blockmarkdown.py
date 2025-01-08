@@ -51,15 +51,25 @@ def markdown_to_html_node(markdown):
             print("This one is a header")
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
             extendingList.extend([
-                LeafNode(f"h{headingNumber}", f"{currentBlock}", None, None)
+                HTMLNode(f"h{headingNumber}", f"{currentBlock}", None, None)
             ])
         elif blockType == "quote block":
             print("This one is a quote block")
+            extendingList.extend([
+                HTMLNode("blockquote", currentBlock, None, None)
+            ])
         elif blockType == "sorted list":
             print("This one is a sorted list")
+            extendingList.extend([
+                HtmlNode("ol")
+            ])
         elif blockType == "code":
             print("This one is a code block")
         elif blockType == "unsorted list":
             print("This one is an unsorted list")
+            currentList = [line.strip("* ") for line in currentBlock.split("\n") if line]
+            extendingList.extend([
+                HTMLNode("ul", None, [("li", item, None, None) for item in currentList], None)
+            ])
         elif blockType == "normal":
             print("This one is a normal")
