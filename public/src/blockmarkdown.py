@@ -49,6 +49,10 @@ def markdown_to_html_node(markdown):
         print(f"Current block type: {blockType}")
         if blockType == "header":
             print("This one is a header")
+            headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
+            extendingList.extend([
+                LeafNode(f"h{headingNumber}", f"{currentBlock}", None, None)
+            ])
         elif blockType == "quote block":
             print("This one is a quote block")
         elif blockType == "sorted list":
