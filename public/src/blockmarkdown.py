@@ -75,6 +75,7 @@ def markdown_to_html_node(markdown):
             print("This one is an unsorted list")
             currentList = [line.strip("* ") for line in currentBlock.split("\n") if line]
             currentList2 = [line.strip("- ") for line in currentList]
+            print
             extendingList.extend([
                 HTMLNode("ul", None, [LeafNode("li", item, None, None) for item in currentList2], None)
             ])
