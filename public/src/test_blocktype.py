@@ -31,5 +31,13 @@ class blockType(unittest.TestCase):
         inputText = ">This will be a fake quote block that \n> will not be returned as a quote block, due to \n one of the new lines missing the \n> carrot"
         testFunction = block_to_blocktype(inputText)
         self.assertEqual(testFunction, "normal")
+    def test_emptyBlock(self):
+        inputText = ""
+        testFunction = block_to_blocktype(inputText)
+        self.assertEqual(testFunction, "normal")
+    def test_sortedList(self):
+        inputText = "1. This is a sorted list\n2. With sorted numbers\n3. Hoping it picks it up"
+        testFunction = block_to_blocktype(inputText)
+        self.assertEqual(testFunction, "sorted list")
 if __name__ == "__main__":
     unittest.main()

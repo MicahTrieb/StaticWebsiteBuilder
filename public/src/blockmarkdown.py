@@ -14,20 +14,29 @@ def block_to_blocktype(inputBlock):
         return "code"
     if inputBlock:
         unsortedLines = inputBlock.split("\n")
-    if(unsortedLines):
-        counter = 0
-        for currentLine in unsortedLines:
-            currentList = [(re.findall(r"^\-(?= )", currentLine)), (re.findall(r"^\*(?= )", currentLine))]
-            if currentList[0] or currentList[1]:
-                counter += 1
-    if counter == len(unsortedLines) and unsortedLines:
-        return "unsorted list"
-    if(unsortedLines) and re.findall(r"^>", inputBlock):
-        counter = 0
-        for currentLine in unsortedLines:
-            currentList = [re.findall(r"^>", currentLine)]
-            counter += 1
+        if(unsortedLines):
+            counter = 0
+            for currentLine in unsortedLines:
+                currentList = [(re.findall(r"^\-(?= )", currentLine)), (re.findall(r"^\*(?= )", currentLine))]
+                if currentList[0] or currentList[1]:
+                    counter += 1
         if counter == len(unsortedLines) and unsortedLines:
-            return "quote block"
-    else:
-        return "normal"
+            return "unsorted list"
+        if(unsortedLines):
+            counter = 0
+            for currentLine in unsortedLines:
+                if (re.findall(r"^>", currentLine)):
+                    counter += 1
+            if counter == len(unsortedLines) and unsortedLines:
+                return "quote block"
+            counter = 1
+            for currentLine in unsortedLines:
+                if re.search(rf"^{counter}\. ", currentLine):
+                    print (currentLine)
+                    counter +=1 
+                if counter == len(unsortedLines) - 1 and unsortedLines:
+                    return ("sorted list")
+            
+
+    
+    return "normal"
