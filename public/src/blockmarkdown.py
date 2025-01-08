@@ -60,16 +60,27 @@ def markdown_to_html_node(markdown):
             ])
         elif blockType == "sorted list":
             print("This one is a sorted list")
+            currentList = []
+            for line in currentBlock:
+                currentList.extend([line])
             extendingList.extend([
-                HtmlNode("ol")
+                HTMLNode("ol", None, [("li", item, None, None) for item in currentList], None)
             ])
         elif blockType == "code":
             print("This one is a code block")
+            extendingList.extend([
+                HTMLNode("code", None, currentBlock, None)
+            ])
         elif blockType == "unsorted list":
             print("This one is an unsorted list")
             currentList = [line.strip("* ") for line in currentBlock.split("\n") if line]
+            currentList2 = [line.strip("- ") for line in currentList]
             extendingList.extend([
-                HTMLNode("ul", None, [("li", item, None, None) for item in currentList], None)
+                HTMLNode("ul", None, [LeafNode("li", item, None, None) for item in currentList2], None)
             ])
         elif blockType == "normal":
             print("This one is a normal")
+            extendingList.extend([
+                HTMLNode("p", currentBlock, None, None)
+            ])
+    return (extendingList)
