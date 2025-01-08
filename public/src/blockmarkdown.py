@@ -40,5 +40,22 @@ def block_to_blocktype(inputBlock):
 
 def markdown_to_html_node(markdown):
     blockedOut = markdown_to_blocks(markdown)
+    extendingList = []
+    for i in blockedOut:
+        print (block_to_blocktype(i))
     for currentBlock in blockedOut:
-        print(block_to_blocktype(currentBlock))
+        print(f"Current block: {currentBlock}")
+        blockType = block_to_blocktype(currentBlock)
+        print(f"Current block type: {blockType}")
+        if blockType == "header":
+            print("This one is a header")
+        elif blockType == "quote block":
+            print("This one is a quote block")
+        elif blockType == "sorted list":
+            print("This one is a sorted list")
+        elif blockType == "code":
+            print("This one is a code block")
+        elif blockType == "unsorted list":
+            print("This one is an unsorted list")
+        elif blockType == "normal":
+            print("This one is a normal")
