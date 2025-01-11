@@ -44,8 +44,6 @@ def block_to_blocktype(inputBlock):
 def markdown_to_html_node(markdown):
     blockedOut = markdown_to_blocks(markdown)
     extendingList = []
-    for i in blockedOut:
-        print (block_to_blocktype(i))
     for currentBlock in blockedOut:
         print(f"Current block: {currentBlock}")
         blockType = block_to_blocktype(currentBlock)
@@ -63,12 +61,12 @@ def markdown_to_html_node(markdown):
             ])
         elif blockType == "sorted list":
             print("This one is a sorted list")
-            #currentList = []
-            #for line in currentBlock:
-            #    currentList.extend([LeafNode("li", f"{line}", None, None)])
-            #extendingList.extend([
-            #    HTMLNode("ol", None, (item for item in currentList), None)
-            #])
+            currentList = []
+            for line in currentBlock:
+                currentList.extend([LeafNode("li", f"{line}", None, None)])
+            extendingList.extend([
+                HTMLNode("ol", None, (item for item in currentList), None)
+            ])
         elif blockType == "code":
             print("This one is a code block")
             extendingList.extend([
@@ -91,7 +89,7 @@ def markdown_to_html_node(markdown):
             extendingList.extend([
                 HTMLNode("p", currentBlock, None, None)
             ])
-    return (extendingList)
+    return (HTMLNode("div", None, extendingList, None))
 
 def text_to_children(text):
     nodes = []
