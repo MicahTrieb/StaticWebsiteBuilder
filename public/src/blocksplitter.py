@@ -4,7 +4,7 @@ from regexfunction import extract_markdown_images, extract_markdown_link
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    print(f"These are the old nodes before entering the code: {old_nodes}\n")
+    #print(f"These are the old nodes before entering the code: {old_nodes}\n")
     #Making sure delimiter and text_type are valid before entering code loop
     if delimiter == None or delimiter == "":
         return old_nodes
@@ -18,8 +18,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     nestingList = []
     #Iterating through every node sent through, 
     for currentNode in old_nodes:
-        print(f"This is the current node in the for loop: {currentNode}\n")
-        print(f"This is the current text of the node: {currentNode.text}\n")
+        #print(f"This is the current node in the for loop: {currentNode}\n")
+        #print(f"This is the current text of the node: {currentNode.text}\n")
         #Returning the node as is if the wanted text type is NORMAL
         if (delimiter == "**"):
             delimiter = "*"
@@ -196,16 +196,16 @@ def text_to_textnodes(text):
     if not text:
         return []
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
-    print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
+    #print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
     if (split_nodes_image(parsingTextNode)):
         returnNodes = split_nodes_image(parsingTextNode)
     else:
         returnNodes = parsingTextNode
-    print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
+    #print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
     if simple_parser(returnNodes):
         returnNodes = simple_parser(returnNodes)
 
-    print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
+    #print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
     runningList = []
     currentContent = split_nodes_delimiter(returnNodes, "*", TextType.BOLD)
     newList = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)

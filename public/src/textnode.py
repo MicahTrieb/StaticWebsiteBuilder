@@ -37,20 +37,20 @@ class TextNode:
 	def text_node_to_html_node(self):
 		match (self.text_type):
 			case TextType.NORMAL:
-				return ((LeafNode(tag=None,value=self.text).to_html()))
+				return LeafNode(tag=None,value=self.text)
 			case TextType.BOLD:
-				return ((LeafNode(tag="b",value=self.text).to_html()))
+				return LeafNode(tag="b",value=self.text)
 			case TextType.ITALIC:
-				return ((LeafNode(tag="i",value=self.text).to_html()))
+				return LeafNode(tag="i",value=self.text)
 			case TextType.CODE:
-				return ((LeafNode(tag="code",value=self.text).to_html()))
+				return LeafNode(tag="code",value=self.text)
 			case TextType.LINKS:
-				if self.url == "":
+				if self.url == "" or self.url.strip() == "":
 					raise TypeError("Links need a URL")
-				return ((LeafNode(tag="a",value=self.text, props={"href":self.url}).to_html()))
+				return LeafNode(tag="a",value=self.text, props={"href":self.url})
 			case TextType.IMAGES:
 				if self.url == "":
 					raise TypeError("Images need an image link")
-				return (((LeafNode(tag="img",value="",props={"src":self.url,"alt":self.text}).to_html())).replace("></img"," /"))
+				return LeafNode(tag="img",value="",props={"src":self.url,"alt":self.text})
 			case _:
 				raise Exception("Invalid Text Type")

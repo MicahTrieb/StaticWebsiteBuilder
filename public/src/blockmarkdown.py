@@ -1,5 +1,8 @@
 import re
 from htmlnode import HTMLNode, LeafNode, ParentNode
+from textnode import TextNode
+from regexfunction import extract_markdown_images, extract_markdown_link
+from blocksplitter import text_to_textnodes
 def markdown_to_blocks(inputString):
     return [block.strip() for  block in inputString.split("\n\n")]
 
@@ -60,28 +63,39 @@ def markdown_to_html_node(markdown):
             ])
         elif blockType == "sorted list":
             print("This one is a sorted list")
-            currentList = []
-            for line in currentBlock:
-                currentList.extend([line])
-            extendingList.extend([
-                HTMLNode("ol", None, [("li", item, None, None) for item in currentList], None)
-            ])
+            #currentList = []
+            #for line in currentBlock:
+            #    currentList.extend([LeafNode("li", f"{line}", None, None)])
+            #extendingList.extend([
+            #    HTMLNode("ol", None, (item for item in currentList), None)
+            #])
         elif blockType == "code":
             print("This one is a code block")
             extendingList.extend([
                 HTMLNode("code", None, currentBlock, None)
             ])
         elif blockType == "unsorted list":
+            childrenList = []
             print("This one is an unsorted list")
-            currentList = [line.strip("* ") for line in currentBlock.split("\n") if line]
-            currentList2 = [line.strip("- ") for line in currentList]
-            print
-            extendingList.extend([
-                HTMLNode("ul", None, [LeafNode("li", item, None, None) for item in currentList2], None)
-            ])
+            splitLines = currentBlock.split("\n")
+            for currentLine in splitLines:
+                currentChildren = (text_to_children(currentLine.lstrip("* -")))
+                print (currentChildren)
+                childrenList.append(HTMLNode("li", None, currentChildren, None))
+            extendingList.append(HTMLNode("ul", None, childrenList, None))
+
+
+            
         elif blockType == "normal":
             print("This one is a normal")
             extendingList.extend([
                 HTMLNode("p", currentBlock, None, None)
             ])
     return (extendingList)
+
+def text_to_children(text):
+    nodes = []
+    currentTextNodes = (text_to_textnodes(text))
+    for currentNode in currentTextNodes:
+        nodes.append(TextNode.text_node_to_html_node(currentNode))
+    return nodes
