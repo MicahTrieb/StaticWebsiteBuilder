@@ -13,6 +13,17 @@ class HTMLNode:
 			for currentKey in self.props.keys():
 				returnList.append(f" {currentKey}={self.props[currentKey]}")
 			return "".join(returnList)
+	def add_child(self, node):
+		if isinstance(node, list):
+			for currentNode in node:
+				if not isinstance(currentNode, HTMLNode):
+					raise Exception("All list contents must be HTMLNodes")
+			self.children.extend(node)
+		elif isinstance(node, HTMLNode):
+			self.children.append(node)
+		else:
+			raise Exception("Content must be an HTMLNode")
+
 	def __repr__(self):
     		return f"tag={self.tag} value={self.value} children={self.children} props={self.props}"
 class LeafNode(HTMLNode):
@@ -111,3 +122,4 @@ class ParentNode(HTMLNode):
 			#print("NINE-2")
 			appendingList = "".join(appendingList)
 			return (f"<{self.tag}>{appendingList}</{self.tag}>")
+		
