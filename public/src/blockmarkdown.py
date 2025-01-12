@@ -58,7 +58,8 @@ def markdown_to_html_node(markdown):
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentSplittedBlock in splitBlock:
-                currentNode = text_to_textnodes(currentSplittedBlock.strip("-* "))
+                childrenList.append(HTMLNode("li", currentSplittedBlock.strip("-* "), None))
+            
 
     return divNode
 def text_to_children(text):

@@ -142,7 +142,7 @@ def text_to_textnodes(text):
 
     #print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
     runningList = []
-    currentContent = split_nodes_delimiter(returnNodes, "*", TextType.BOLD)
+    currentContent = split_nodes_delimiter(returnNodes, "**", TextType.BOLD)
     newList = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)
     newList2 = split_nodes_delimiter(newList, "`", TextType.CODE)
     return newList2
