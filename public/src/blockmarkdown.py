@@ -48,14 +48,18 @@ def markdown_to_html_node(markdown):
     for currentBlock in allBlocks:
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
-            strippedBlock = currentBlock.lstrip("# ")
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
-            currentNode = text_to_textnodes(strippedBlock)
-            divNode.add_child(HTMLNode(f"h{headingNumber}", None, currentNode, None))
+            divNode.add_child(HTMLNode(f"h{headingNumber}", None, text_to_textnodes(currentBlock.lstrip("# ")), None))
         if blockType == "code":
-            strippedBlock = currentBlock.strip("`")
-            currentNode = text_to_textnodes(strippedBlock)
-            divNode.add_child(HTMLNode("code", strippedBlock, None))
+            divNode.add_child(HTMLNode("code", text_to_textnodes(currentBlock.strip("`")), None))
+        if blockType == "quote block":
+            divNode.add_child(HTMLNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
+        if blockType == "unsorted list":
+            splitBlock = currentBlock.split("\n")
+            childrenList = []
+            for currentSplittedBlock in splitBlock:
+                currentNode = text_to_textnodes(currentSplittedBlock.strip("-* "))
+
     return divNode
 def text_to_children(text):
     nodes = []
