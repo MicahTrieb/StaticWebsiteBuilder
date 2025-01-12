@@ -60,13 +60,14 @@ def markdown_to_html_node(markdown):
                 HTMLNode("blockquote", currentBlock, None, None)
             ])
         elif blockType == "sorted list":
+            childrenList = []
             print("This one is a sorted list")
-            currentList = []
-            for line in currentBlock:
-                currentList.extend([LeafNode("li", f"{line}", None, None)])
-            extendingList.extend([
-                HTMLNode("ol", None, (item for item in currentList), None)
-            ])
+            splitLines = currentBlock.split("\n")
+            for currentLineIndex in range (1, len(splitLines)+1):
+                currentChildren = (text_to_children(splitLines[currentLineIndex - 1].lstrip(f"{currentLineIndex}. ")))
+                print (currentChildren)
+                childrenList.append(HTMLNode("li", None, splitLines[currentLineIndex - 1]))
+            extendingList.append(HTMLNode("ol", None, childrenList, None))
         elif blockType == "code":
             print("This one is a code block")
             extendingList.extend([
@@ -97,3 +98,13 @@ def text_to_children(text):
     for currentNode in currentTextNodes:
         nodes.append(TextNode.text_node_to_html_node(currentNode))
     return nodes
+def add_child(self, node):
+    if isinstance(node, list):
+        for currentNode in node:
+            if not isinstance(currentNode, HTMLNode):
+                raise Exception("All list contents must be HTMLNodes")
+        self.children.extend(node)
+    elif isinstance(node, HTMLNode):
+        self.children.append(node)
+    else:
+        raise Exception("Content must be an HTMLNode")
