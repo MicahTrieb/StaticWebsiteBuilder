@@ -9,14 +9,16 @@ import re
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     returnList = []
     for currentNode in old_nodes:
-        print(currentNode.text.split(delimiter))
         if currentNode.text_type != TextType.NORMAL:
             returnList.append(currentNode)
         else:
             splitString = currentNode.text.split(delimiter)
             if splitString and len(splitString) != 2:
                 for currentIndex in range(0, len(splitString)):
-                    if currentIndex % 2 == 0 and :
+                    if currentIndex == 0 or currentIndex == len(splitString) - 1:
+                        if splitString[currentIndex] == "":
+                            continue
+                    if currentIndex % 2 == 0:
                             returnList.append(TextNode(f"{splitString[currentIndex]}",TextType.NORMAL))
                     else:
                             returnList.append(TextNode(f"{splitString[currentIndex]}", text_type))
@@ -26,7 +28,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 raise Exception("Unmatched delimiter")
             else:
                 returnList.append(currentNode)
-    print (returnList)
     return (returnList)
         
 
