@@ -51,7 +51,7 @@ def markdown_to_html_node(markdown):
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
             divNode.add_child(HTMLNode(f"h{headingNumber}", None, text_to_textnodes(currentBlock.lstrip("# ")), None))
         if blockType == "code":
-            divNode.add_child(HTMLNode("code", text_to_textnodes(currentBlock.strip("`")), None))
+            divNode.add_child(HTMLNode("code", f"{text_to_textnodes(currentBlock.strip("`"))}", None))
         if blockType == "quote block":
             divNode.add_child(HTMLNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
         if blockType == "unsorted list":
@@ -59,7 +59,6 @@ def markdown_to_html_node(markdown):
             childrenList = []
             for currentSplittedBlock in splitBlock:
                 childrenList.append(HTMLNode("li", currentSplittedBlock.strip("-* "), None))
-            
 
     return divNode
 def text_to_children(text):
@@ -78,3 +77,11 @@ def add_child(self, node):
         self.children.append(node)
     else:
         raise Exception("Content must be an HTMLNode")
+    
+def pretty_print_node(node, level=0):
+    indent = "  " * level
+    result = f"{indent}{node.tag}: {node.value}\n"
+    if node.children:
+        for child in node.children:
+            result += pretty_print_node(child, level + 1)
+    return result
