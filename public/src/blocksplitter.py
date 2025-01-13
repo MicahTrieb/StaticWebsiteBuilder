@@ -45,10 +45,7 @@ def split_nodes_image(old_nodes):
             for currentImageRegex in regexedImages:
                 regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
         #print (regexDictionary)
-        preLinkRegexed = re.findall(r"[\w\s]+(?=\!\[)", currentNode.text)
-        if not preLinkRegexed:
-            returnList.append(currentNode)
-            continue
+        preLinkRegexed = re.findall(r"(.+)(?=!)", currentNode.text)
         #print (preLinkRegexed)
         matchList = []
         for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
