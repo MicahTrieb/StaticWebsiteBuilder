@@ -46,6 +46,7 @@ def markdown_to_html_node(markdown):
     allBlocks = markdown_to_blocks(markdown)
     appendingBlockList = []
     for currentBlock in allBlocks:
+        #print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
@@ -77,11 +78,3 @@ def add_child(self, node):
         self.children.append(node)
     else:
         raise Exception("Content must be an HTMLNode")
-    
-def pretty_print_node(node, level=0):
-    indent = "  " * level
-    result = f"{indent}{node.tag}: {node.value}\n"
-    if node.children:
-        for child in node.children:
-            result += pretty_print_node(child, level + 1)
-    return result

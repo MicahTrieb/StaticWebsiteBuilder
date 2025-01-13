@@ -38,15 +38,18 @@ def split_nodes_image(old_nodes):
         textList = []
         regexedList = []
         regexDictionary = {}
-        # print(currentNode)
-        # print (extract_markdown_images(currentNode.text))
+        #print(currentNode)
+        #print (extract_markdown_images(currentNode.text))
         regexedImages = extract_markdown_images(currentNode.text)
         if regexedImages:
             for currentImageRegex in regexedImages:
                 regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
-        # print (regexDictionary)
-        preLinkRegexed = re.findall(r"[\w\s]+(?=\!)", currentNode.text)
-        # print (preLinkRegexed)
+        #print (regexDictionary)
+        preLinkRegexed = re.findall(r"[\w\s]+(?=\!\[)", currentNode.text)
+        if not preLinkRegexed:
+            returnList.append(currentNode)
+            continue
+        #print (preLinkRegexed)
         matchList = []
         for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
@@ -55,11 +58,11 @@ def split_nodes_image(old_nodes):
         for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
-        # print(f"Current match list: {matchList}\n")
+        #print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
-            # print(f"Current match here: {currentMatch}\n")
-            # print (f"Regex dictionary here: {regexDictionary}\n")
-            # print (f"Full match list here: {matchList}\n")
+            #print(f"Current match here: {currentMatch}\n")
+            #print (f"Regex dictionary here: {regexDictionary}\n")
+            #print (f"Full match list here: {matchList}\n")
             if currentMatch[2] == 'text' and currentMatch[1]:
                 textList.extend([
                     TextNode(currentMatch[1], TextType.NORMAL)
@@ -70,7 +73,7 @@ def split_nodes_image(old_nodes):
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
-        # print (matchList)
+        #print (matchList)
         returnList.extend(textList)
         textList = []
         regexDictionary = {}
@@ -128,14 +131,18 @@ def simple_parser(old_nodes):
     return (returnList)
 
 def text_to_textnodes(text):
+    #print("1")
     if not text:
         return []
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
     #print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
     if (split_nodes_image(parsingTextNode)):
+        #print("2")
+        #print(f"Split node image return here: {split_nodes_image(parsingTextNode)}")
         returnNodes = split_nodes_image(parsingTextNode)
     else:
         returnNodes = parsingTextNode
+        #print("3")
     #print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
     if simple_parser(returnNodes):
         returnNodes = simple_parser(returnNodes)

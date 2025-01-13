@@ -10,9 +10,9 @@ from blocksplitter import *
 
 
 class TestParentNode(unittest.TestCase):
-    def test_bold_text(self):
-        textnode = TextNode("This is bold text", TextType.BOLD)
-        self.assertEqual(textnode.text_node_to_html_node(), "<b>This is bold text</b>")
+    def test_eatingWords(self):
+        text = '```python\ndef hello_world():\n    print(\"Hello, World!\")\n```'
+        print(text_to_textnodes(text.strip("`")))
 
 if __name__ == "__main__":
     unittest.main()
