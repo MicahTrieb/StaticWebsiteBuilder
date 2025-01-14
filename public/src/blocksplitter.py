@@ -38,19 +38,19 @@ def split_nodes_image(old_nodes):
         textList = []
         regexedList = []
         regexDictionary = {}
-        print(currentNode)
-        print (extract_markdown_images(currentNode.text))
+        #print(currentNode)
+        #print (extract_markdown_images(currentNode.text))
         regexedImages = extract_markdown_images(currentNode.text)
         if regexedImages:
             for currentImageRegex in regexedImages:
                 regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
-        print (regexDictionary)
+        #print (regexDictionary)
         preLinkRegexed = re.findall(r"(.+)(?=\!\[.+\])", currentNode.text)
         linkExistanceCheck = re.findall(r"!\[([^\]]+)\]", currentNode.text)
         if not preLinkRegexed and not linkExistanceCheck:
             returnList.append(currentNode)
             continue
-        print (preLinkRegexed)
+        #print (preLinkRegexed)
         matchList = []
         for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'image'))
@@ -59,9 +59,9 @@ def split_nodes_image(old_nodes):
         for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
-        print(f"Image matches: {[(m.start(), m.group(0)) for m in re.finditer(r'!\[([^\]]+)\]', currentNode.text)]}")
-        print(f"Text matches: {[(m.start(), m.group(0)) for m in re.finditer(r'([\w\s*`.]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)', currentNode.text)]}")
-        print(f"Link matches: {[(m.start(), m.group(0)) for m in re.finditer(r'(?<!!)\[([^\]]+)\]\(([^\)]+)\)', currentNode.text)]}")
+        #print(f"Image matches: {[(m.start(), m.group(0)) for m in re.finditer(r'!\[([^\]]+)\]', currentNode.text)]}")
+        #print(f"Text matches: {[(m.start(), m.group(0)) for m in re.finditer(r'([\w\s*`.]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)', currentNode.text)]}")
+        #print(f"Link matches: {[(m.start(), m.group(0)) for m in re.finditer(r'(?<!!)\[([^\]]+)\]\(([^\)]+)\)', currentNode.text)]}")
 
         for currentMatch in matchList:
             #print(f"Current match here: {currentMatch}\n")
@@ -71,15 +71,15 @@ def split_nodes_image(old_nodes):
                 textList.extend([
                     TextNode(currentMatch[1], TextType.NORMAL)
                 ])
-                print ("Text extended")
+                #print ("Text extended")
             if currentMatch[2] == 'image' and currentMatch[1]:
                 dictionaryIndexer = currentMatch[1].strip("![]")
                 
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
                 ])
-                print ("Image link extended")
-        print (f"Current match list: {matchList}")
+                #print ("Image link extended")
+        #print (f"Current match list: {matchList}")
         returnList.extend(textList)
         textList = []
         regexDictionary = {}

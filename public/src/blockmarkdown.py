@@ -73,6 +73,7 @@ def markdown_to_html_node(markdown):
             divNode.add_child(childrenNode)
         if blockType == "normal":
             divNode.add_child(HTMLNode("p", text_to_textnodes(currentBlock), None))
+    print(node_clean_up(divNode))
     return divNode
 def text_to_children(text):
     nodes = []
@@ -90,3 +91,21 @@ def add_child(self, node):
         self.children.append(node)
     else:
         raise Exception("Content must be an HTMLNode")
+    
+def node_clean_up(node, level = 0):
+    fullString = ""
+    currentIndent = "    " * level
+    if isinstance(node, TextNode):
+        fullString += (f"{currentIndent}{node.text}\n")
+
+    if isinstance(node, HTMLNode):
+        fullString += (f"{currentIndent}Tag: {node.tag}   Value: {node.value}   Children: ")
+        print(fullString)
+        if node.children:
+            for currentNodeChild in node.children:
+                fullString += node_clean_up(currentNodeChild, level + 1)
+        else:
+            fullString += (f"No children\n")
+
+    return(fullString)
+    
