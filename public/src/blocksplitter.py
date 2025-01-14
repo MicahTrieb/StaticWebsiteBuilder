@@ -127,15 +127,7 @@ def split_nodes_link(old_nodes):
     return returnList
 
 def simple_parser(old_nodes):
-    returnList = []
-    for currentNode in old_nodes:
-        currentExtraction = extract_markdown_link(currentNode.text)
-        if currentExtraction:
-            for currentExtract in currentExtraction:
-                returnList.extend([TextNode(currentExtract[0], TextType.LINKS, currentExtract[1])])
-        else:
-            returnList.extend([currentNode.text])
-    return returnList
+    pass
 def text_to_textnodes(text):
     #print("1")
     if not text:
@@ -148,10 +140,10 @@ def text_to_textnodes(text):
         returnNodes = split_nodes_image(parsingTextNode)
     else:
         returnNodes = parsingTextNode
-        print("3")s
+        print("3")
     print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
-    if simple_parser(returnNodes):
-        returnNodes = simple_parser(split_nodes_link(returnNodes))
+    if split_nodes_link(returnNodes):
+        returnNodes = split_nodes_link(returnNodes)
 
     print (f"LINK PULLED RETURN NODES: {returnNodes}\n")
     runningList = []
