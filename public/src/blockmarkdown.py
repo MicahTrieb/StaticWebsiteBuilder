@@ -59,7 +59,7 @@ def markdown_to_html_node(markdown):
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentSplittedBlock in splitBlock:
-                childrenList.append(HTMLNode("li", text_to_textnodes(currentSplittedBlock.strip("-* ")), None))
+                childrenList.append(HTMLNode("li", text_to_textnodes(currentSplittedBlock.lstrip("-* ")), None))
             childrenNode = HTMLNode("ul", None, [], None)
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
@@ -67,10 +67,12 @@ def markdown_to_html_node(markdown):
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentBlockIndex in range(0, len(splitBlock)):
-                childrenList.append(HTMLNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1} "))))
+                childrenList.append(HTMLNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1}. "))))
             childrenNode = HTMLNode("ol", None, [], None)
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
+        if blockType == "normal":
+            divNode.add_child(HTMLNode("p", text_to_textnodes(currentBlock), None))
     return divNode
 def text_to_children(text):
     nodes = []

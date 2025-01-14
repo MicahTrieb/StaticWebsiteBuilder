@@ -11,8 +11,8 @@ from blocksplitter import *
 
 class TestParentNode(unittest.TestCase):
     def test_eatingWords(self):
-        text = '```python\ndef hello_world():\n    print(\"Hello, World!\")\n```'
-        print(text_to_textnodes(text.strip("`")))
+        text = '[Markdown Guide](https://www.markdownguide.org)\n- ![Example Image](https://via.placeholder.com/150)'
+        print(text_to_textnodes(text))
 
 if __name__ == "__main__":
     unittest.main()
