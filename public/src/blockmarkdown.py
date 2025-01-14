@@ -50,9 +50,11 @@ def markdown_to_html_node(markdown):
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
-            divNode.add_child(HTMLNode(f"h{headingNumber}", None, text_to_textnodes(currentBlock.lstrip("# ")), None))
+            divNode.add_child(HTMLNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# ")), None))
         if blockType == "code":
-            divNode.add_child(HTMLNode("code", f"{text_to_textnodes(currentBlock.strip("`"))}", None))
+            childrenNode = HTMLNode("pre", None, [], None)
+            childrenNode.add_child(HTMLNode("code", text_to_textnodes(currentBlock.strip("`")), None))
+            divNode.add_child(childrenNode)
         if blockType == "quote block":
             divNode.add_child(HTMLNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
         if blockType == "unsorted list":
@@ -99,8 +101,7 @@ def node_clean_up(node, level = 0):
         fullString += (f"{currentIndent}{node.text}\n")
 
     if isinstance(node, HTMLNode):
-        fullString += (f"{currentIndent}Tag: {node.tag}   Value: {node.value}   Children: ")
-        print(fullString)
+        fullString += (f"\n{currentIndent}Tag: {node.tag}   Value: {node.value}   Children: ")
         if node.children:
             for currentNodeChild in node.children:
                 fullString += node_clean_up(currentNodeChild, level + 1)
