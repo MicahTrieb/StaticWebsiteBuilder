@@ -10,9 +10,17 @@ from blocksplitter import *
 
 
 class TestParentNode(unittest.TestCase):
-    def test_eatingWords(self):
-        text = '[Markdown Guide](https://www.markdownguide.org)\n- ![Example Image](https://via.placeholder.com/150)'
-        print(text_to_textnodes(text))
+    def test_multipleLinks(self):
+        textString = "Check out [this link](https://example.com) and [another one](https://another.com)."
+        result = text_to_textnodes(textString)
+        expected = [
+            TextNode("Check out ", TextType.NORMAL),
+            TextNode("this link", TextType.LINKS, "https://example.com"),
+            TextNode(" and ", TextType.NORMAL),
+            TextNode("another one", TextType.LINKS, "https://another.com"),
+            TextNode(".", TextType.NORMAL),
+        ]
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main()
