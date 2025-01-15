@@ -1,9 +1,8 @@
 from textnode import *
- 	
+from directorycopy import directory_copy, copying_function
 def main():
 	print("Hello world! Executing main.py!")
-	print (TextNode("This is a text node", 'BOLD', "https://www.boot.dev"))
-	return TextNode("This is a text node", 'BOLD', "https://www.boot.dev")
+	directory_copy
 
 main()
 	
