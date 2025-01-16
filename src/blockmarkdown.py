@@ -46,7 +46,7 @@ def markdown_to_html_node(markdown):
     allBlocks = markdown_to_blocks(markdown)
     appendingBlockList = []
     for currentBlock in allBlocks:
-        #print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
+        print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
