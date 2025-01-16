@@ -149,3 +149,6 @@ def text_to_textnodes(text):
     newList = split_nodes_delimiter(currentContent, "*", TextType.ITALIC)
     newList2 = split_nodes_delimiter(newList, "`", TextType.CODE)
     return newList2
+
+def simple_parser(self):
+    pass
