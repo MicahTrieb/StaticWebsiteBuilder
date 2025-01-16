@@ -7,22 +7,12 @@ def directory_copy(movingDirectory, targetDirectory):
         createAnswer = ""
         possibleNo = ["No", "no", "N", "n", "NO"]
         possibleAnswers = possibleNo + possibleYes
-        #while createAnswer not in possibleAnswers:
-            #createAnswer = input(f"Directory not found, would you like to create directory {targetDirectory}?\n")
-        #if createAnswer in possibleNo:
-            #raise Exception("Target directory does not exist")
-        if True:# createAnswer in possibleYes:
-            os.mkdir(targetDirectory)
-            copying_function(movingDirectory, targetDirectory)
+        os.mkdir(targetDirectory)
+        copying_function(movingDirectory, targetDirectory)
     else:
-        #deleteAnswer = input(f"Warning, this will delete {targetDirectory}, are you sure? \n")
-        if True:#deleteAnswer in possibleYes:
-            shutil.rmtree(targetDirectory)
-            os.mkdir(targetDirectory)
-            copying_function(movingDirectory, targetDirectory)
-
-        else:
-            raise Exception("Directory will not be deleted")
+        shutil.rmtree(targetDirectory)
+        os.mkdir(targetDirectory)
+        copying_function(movingDirectory, targetDirectory)
     
 def copying_function(movingDirectory, targetDirectory):
     listToBeCopied = os.listdir(movingDirectory)

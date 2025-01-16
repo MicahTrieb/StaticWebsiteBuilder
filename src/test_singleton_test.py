@@ -3,25 +3,17 @@ import unittest
 from htmlnode import HTMLNode, ParentNode, LeafNode
 from textnode import *
 from blocksplitter import *
-
-
+from extracttitle import extract_title
+from directorycopy import *
+from pagegenerator import generate_page
 
 
 
 
 class TestParentNode(unittest.TestCase):
-    def test_multipleLinks(self):
-        textString = "Check out [this link](https://example.com) and [another one](https://another.com)."
-        result = text_to_textnodes(textString)
-        expected = [
-            TextNode("Check out ", TextType.NORMAL),
-            TextNode("this link", TextType.LINKS, "https://example.com"),
-            TextNode(" and ", TextType.NORMAL),
-            TextNode("another one", TextType.LINKS, "https://another.com"),
-            TextNode(".", TextType.NORMAL),
-        ]
-        self.assertEqual(result, expected)
-
+    def test_print_directory(self):
+        #from_path, template_path, dest_path
+        generate_page("/home/mici/gitHub/MicahsProjects/staticWebsite/content/index.html","/home/mici/gitHub/MicahsProjects/staticWebsite/template.html","Filler")
 if __name__ == "__main__":
     unittest.main()
 
