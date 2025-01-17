@@ -12,7 +12,8 @@ def generate_page(from_path, template_path, dest_path):
     #readingDirectory = str(os.read(openDirectory, 2500000))
     #print (text_to_textnodes(readingDirectory))
     #openDirectory = os.open(from_path, os.O_APPEND)
-    readingDirectory = str(open(openDirectory, 250000))
+    readingDirectory = str(os.read(os.open(from_path, os.O_APPEND), 25000))
+
     print(readingDirectory)
     print (markdown_to_html_node(readingDirectory))
     #print (text_to_textnodes(readingDirectory))
