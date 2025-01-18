@@ -87,43 +87,29 @@ def split_nodes_image(old_nodes):
 
 def split_nodes_link(old_nodes):
     returnList = []
-    print (old_nodes)
+    textList = []
     for currentNode in old_nodes:
-        textList = []
-        regexedList = []
-        regexDictionary = {}
-        print(f"Current node's text: {currentNode.text}")
-        regexedLinks = extract_markdown_link(currentNode.text)
-        print(f"Regexed Links: {regexedLinks}")
-        if regexedLinks:
-            for currentLinkRegex in regexedLinks:
-                regexDictionary[currentLinkRegex[0]] = currentLinkRegex[1]
-                print (regexDictionary)
         preLinkRegexed = re.findall(r"(^.+)(?=\[[\w\s]\]\([\w\s]+\))", currentNode.text)
         linkExistanceCheck = re.findall(r"\[([^\]]+)\]", currentNode.text)
         if not preLinkRegexed and not linkExistanceCheck:
             returnList.append(currentNode)
             continue
-        matchList = []
-        for match in re.finditer(r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)", currentNode.text):
-            matchList.append((match.start(), match.group(0), 'link'))
-        for match in re.finditer((r""), currentNode.text):
-            print (f"Match list two: ", (match.start(), match.group(0), 'text'))
-            matchList.append((match.start(), match.group(0), 'text'))
-        matchList.sort(key=lambda x: x[0])
-        print(f"Current match list: {matchList}\n")
-        for currentMatch in matchList:
-            if currentMatch[2] == 'text' and currentMatch[1].strip():
-                textList.extend([
-                    TextNode(currentMatch[1], TextType.NORMAL)
+        splitNodeText = re.split(r"(?<!!)(\[[^\)]+\))", currentNode.text)
+        for currentIndex in range(0, len(splitNodeText)):
+                if currentIndex == 0 or currentIndex == len(splitNodeText) - 1:
+                    if splitNodeText[currentIndex] == "":
+                        continue
+                if currentIndex % 2 == 0:
+                    textList.extend([
+                        TextNode(splitNodeText[currentIndex], TextType.NORMAL)]) 
+                else:
+                    linkRegex = re.findall(r"\[([^\]]+)\]\(([^\)]+)\)", splitNodeText[currentIndex].strip("'"))
+                    print(repr(splitNodeText[currentIndex]))
+                    print(splitNodeText[currentIndex])
+                    print(linkRegex)
+                    textList.extend([
+                    TextNode(linkRegex[0][0], TextType.LINKS, linkRegex[0][1])
                 ])
-            if currentMatch[2] == 'link' and currentMatch[1].strip():
-                dictionaryIndexer = currentMatch[1].strip("[]")
-                textList.extend([
-                    TextNode(dictionaryIndexer, TextType.LINKS, regexDictionary[dictionaryIndexer])
-                ])
-        #print (matchList)
-        #print (f"Final return list: {textList}")
         returnList.extend(textList)
         textList = []
     return returnList
