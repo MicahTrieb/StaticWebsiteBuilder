@@ -34,68 +34,45 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 def split_nodes_image(old_nodes):
     returnList = []
+    textList = []
     for currentNode in old_nodes:
-        textList = []
-        regexedList = []
-        regexDictionary = {}
-        #print(currentNode)
-        #print (extract_markdown_images(currentNode.text))
-        regexedImages = extract_markdown_images(currentNode.text)
-        if regexedImages:
-            for currentImageRegex in regexedImages:
-                regexDictionary[currentImageRegex[0]] = currentImageRegex[1]
-        #print (regexDictionary)
-        preLinkRegexed = re.findall(r"(.+)(?=\!\[.+\])", currentNode.text)
-        linkExistanceCheck = re.findall(r"!\[([^\]]+)\]", currentNode.text)
-        if not preLinkRegexed and not linkExistanceCheck:
+        preImageRegexed = re.findall(r"(^.+)(?=\!\[[^\]]+\]\([^\)]+\))", currentNode.text)
+        imageExistenceCheck = re.findall(r"\!\[([^\]]+)\]\([^\)]+\)", currentNode.text)
+        if not preImageRegexed and not imageExistenceCheck:
             returnList.append(currentNode)
             continue
-        #print (preLinkRegexed)
-        matchList = []
-        for match in re.finditer((r"!\[([^\]]+)\]"), currentNode.text):
-            matchList.append((match.start(), match.group(0), 'image'))
-        for match in re.finditer((r"([\w\s*`.]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)"), currentNode.text):
-            matchList.append((match.start(), match.group(0), 'text'))
-        for match in re.finditer((r"(?<!!)\[([^\]]+)\]\(([^\)]+)\)"), currentNode.text):
-            matchList.append((match.start(), match.group(0), 'text'))
-        matchList.sort(key=lambda x: x[0])
-        #print(f"Image matches: {[(m.start(), m.group(0)) for m in re.finditer(r'!\[([^\]]+)\]', currentNode.text)]}")
-        #print(f"Text matches: {[(m.start(), m.group(0)) for m in re.finditer(r'([\w\s*`.]+?)(?=\!\[[^\]]+\]\([^\)]+\)|\[[^\]]+\]\([^\)]+\)|$)', currentNode.text)]}")
-        #print(f"Link matches: {[(m.start(), m.group(0)) for m in re.finditer(r'(?<!!)\[([^\]]+)\]\(([^\)]+)\)', currentNode.text)]}")
-
-        for currentMatch in matchList:
-            #print(f"Current match here: {currentMatch}\n")
-            #print (f"Regex dictionary here: {regexDictionary}\n")
-            #print (f"Full match list here: {matchList}\n")
-            if currentMatch[2] == 'text' and currentMatch[1]:
+        splitImageText = re.split(r"!\[[^\)]+\)")
+        for currentIndex in range(0, len(splitImageText)):
+            if currentIndex == 0 or currentIndex == len(splitImageText) - 1:
+                if splitImageText[currentIndex] == "":
+                    continue  
+            if currentIndex % 2 == 0:
                 textList.extend([
-                    TextNode(currentMatch[1], TextType.NORMAL)
+                    TextNode(splitImageText[currentIndex], TextType.NORMAL)
                 ])
-                #print ("Text extended")
-            if currentMatch[2] == 'image' and currentMatch[1]:
-                dictionaryIndexer = currentMatch[1].strip("![]")
-                
+            else:
+                imageRegex = re.findall(r"!\[[^\]]+)\]\(([^\)]+)\)")
                 textList.extend([
-                    TextNode(dictionaryIndexer, TextType.IMAGES, regexDictionary[dictionaryIndexer])
-                ])
-                #print ("Image link extended")
-        #print (f"Current match list: {matchList}")
+                    TextNode(imageRegex[0][0], TextType.IMAGES, imageRegex[0][1])
+                ])       
         returnList.extend(textList)
         textList = []
-        regexDictionary = {}
     return returnList
-
+#Code redone using re.split instead 
 def split_nodes_link(old_nodes):
     returnList = []
     textList = []
     for currentNode in old_nodes:
-        preLinkRegexed = re.findall(r"(^.+)(?=\[[\w\s]\]\([\w\s]+\))", currentNode.text)
-        linkExistanceCheck = re.findall(r"\[([^\]]+)\]", currentNode.text)
-        if not preLinkRegexed and not linkExistanceCheck:
+        #Checking to make sure there's a link in the currentNode's text
+        preLinkRegexed = re.findall(r"(^.+)(?=\[[^\]]+\]\([^\)]+\))", currentNode.text)
+        linkExistenceCheck = re.findall(r"(?<!!)\[([^\]]+)\]", currentNode.text)
+        if not preLinkRegexed and not linkExistenceCheck:
             returnList.append(currentNode)
             continue
+        #Splitting the text by the link regex
         splitNodeText = re.split(r"(?<!!)(\[[^\)]+\))", currentNode.text)
         for currentIndex in range(0, len(splitNodeText)):
+                #Checking to see if the beginning or end is empty, incase the regex is at the beginning/end
                 if currentIndex == 0 or currentIndex == len(splitNodeText) - 1:
                     if splitNodeText[currentIndex] == "":
                         continue
@@ -104,9 +81,6 @@ def split_nodes_link(old_nodes):
                         TextNode(splitNodeText[currentIndex], TextType.NORMAL)]) 
                 else:
                     linkRegex = re.findall(r"\[([^\]]+)\]\(([^\)]+)\)", splitNodeText[currentIndex].strip("'"))
-                    print(repr(splitNodeText[currentIndex]))
-                    print(splitNodeText[currentIndex])
-                    print(linkRegex)
                     textList.extend([
                     TextNode(linkRegex[0][0], TextType.LINKS, linkRegex[0][1])
                 ])
