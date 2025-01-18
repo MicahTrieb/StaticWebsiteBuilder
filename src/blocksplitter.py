@@ -107,10 +107,10 @@ def split_nodes_link(old_nodes):
         matchList = []
         for match in re.finditer(r"(?<!!)\[([\w\s$-/:-?{-~!\"])+(?=\])\]", currentNode.text):
             matchList.append((match.start(), match.group(0), 'link'))
-        for match in re.finditer((r"[\w\s.'*\(\)]+(?=\[|$)"), currentNode.text):
+        for match in re.finditer((r"(?<!\])[\w\s.'*\(\)]+(?=\[|$)"), currentNode.text):
             matchList.append((match.start(), match.group(0), 'text'))
         matchList.sort(key=lambda x: x[0])
-        print(f"Current match list: {matchList}\n")
+        #print(f"Current match list: {matchList}\n")
         for currentMatch in matchList:
             if currentMatch[2] == 'text' and currentMatch[1].strip():
                 textList.extend([
@@ -121,8 +121,8 @@ def split_nodes_link(old_nodes):
                 textList.extend([
                     TextNode(dictionaryIndexer, TextType.LINKS, regexDictionary[dictionaryIndexer])
                 ])
-        print (matchList)
-        print (f"Final return list: {textList}")
+        #print (matchList)
+        #print (f"Final return list: {textList}")
         returnList.extend(textList)
         textList = []
     return returnList
