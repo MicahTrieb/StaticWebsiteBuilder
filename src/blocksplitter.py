@@ -89,19 +89,19 @@ def split_nodes_link(old_nodes):
     return returnList
 
 def text_to_textnodes(text):
-    print("1")
+    #print("1")
     if not text:
         return []
     parsingTextNode = [TextNode(text, TextType.NORMAL)]
-    print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
+    #print (f"PARSING NODE OUTPUT HERE: {parsingTextNode}\n\n\n")
     if (split_nodes_image(parsingTextNode)):
-        print("2")
-        print(f"Split node image return here: {split_nodes_image(parsingTextNode)}")
+        #print("2")
+        #print(f"Split node image return here: {split_nodes_image(parsingTextNode)}")
         returnNodes = split_nodes_image(parsingTextNode)
     else:
         returnNodes = parsingTextNode
-        print("3")
-    print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
+        #print("3")
+    #print (f"RETURN NODE HERE:\n {returnNodes}\n\n\n")
     if split_nodes_link(returnNodes):
         returnNodes = split_nodes_link(returnNodes)
 

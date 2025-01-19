@@ -4,7 +4,7 @@ from textnode import TextNode
 from regexfunction import extract_markdown_images, extract_markdown_link
 from blocksplitter import text_to_textnodes, simple_parser, split_nodes_delimiter, split_nodes_image, split_nodes_link
 def markdown_to_blocks(inputString):
-    return [block.strip() for  block in inputString.split("\n\n")]
+    return [block.strip() for block in inputString.split("\\n\\n")]
 
 
 def block_to_blocktype(inputBlock):
@@ -46,7 +46,7 @@ def markdown_to_html_node(markdown):
     allBlocks = markdown_to_blocks(markdown)
     appendingBlockList = []
     for currentBlock in allBlocks:
-        print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
+        #print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
@@ -75,7 +75,7 @@ def markdown_to_html_node(markdown):
             divNode.add_child(childrenNode)
         if blockType == "normal":
             divNode.add_child(HTMLNode("p", text_to_textnodes(currentBlock), None))
-    print(node_clean_up(divNode))
+    #print(node_clean_up(divNode))
     return divNode
 def text_to_children(text):
     nodes = []

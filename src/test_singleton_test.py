@@ -11,11 +11,11 @@ from blockmarkdown import *
 
 
 class TestParentNode(unittest.TestCase):
-    #def test_print_directory(self):
+    def test_print_directory(self):
         #from_path, template_path, dest_path
-        #generate_page("/home/mici/gitHub/MicahsProjects/staticWebsite/content/index.html","/home/mici/gitHub/MicahsProjects/staticWebsite/template.html","Filler")
-    def test_markdown_to_html(self):
-        print(split_nodes_link([TextNode('# Tolkien Fan Club\n\n**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn\'t work yet)\n\n', TextType.NORMAL)]))
+        generate_page("/home/mici/gitHub/MicahsProjects/staticWebsite/content/index.html","/home/mici/gitHub/MicahsProjects/staticWebsite/template.html","Filler")
+    #def test_markdown_to_html(self):
+        #print(split_nodes_link([TextNode('# Tolkien Fan Club\n\n**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn\'t work yet)\n\n', TextType.NORMAL)]))
 
     #def test_regex_split(self):
         #print(regex_split_test('# Tolkien Fan Club\n\n**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn\'t work yet)\n\n'))
@@ -27,6 +27,9 @@ class TestParentNode(unittest.TestCase):
                 #print(f"{returnList[i]} should be a text")
             #else:
                 #print (f"{returnList[i]} should be a link")
+    #def test_header_check(self):
+        #headerText = "# This is a header"
+        #print(markdown_to_html_node(headerText))
 
 if __name__ == "__main__":
     unittest.main()
