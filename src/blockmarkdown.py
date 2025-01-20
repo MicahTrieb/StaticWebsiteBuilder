@@ -1,6 +1,6 @@
 import re
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from textnode import TextNode
+from textnode import *
 from regexfunction import extract_markdown_images, extract_markdown_link
 from blocksplitter import text_to_textnodes, simple_parser, split_nodes_delimiter, split_nodes_image, split_nodes_link
 def markdown_to_blocks(inputString):
@@ -52,18 +52,18 @@ def markdown_to_html_node(markdown):
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
-            divNode.add_child(LeafNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# ")), None))
+            divNode.add_child(LeafNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# "))[0].text_node_to_html_node(), None))
         if blockType == "code":
             childrenNode = ParentNode("pre", None, [])
-            childrenNode.add_child(LeafNode("code", text_to_textnodes(currentBlock.strip("`")), None))
+            childrenNode.add_child(LeafNode("code", text_to_textnodes(currentBlock.strip("`"))[0].text_node_to_html_node(), None))
             divNode.add_child(childrenNode)
         if blockType == "quote block":
-            divNode.add_child(LeafNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
+            divNode.add_child(LeafNode("blockquote", text_to_textnodes(currentBlock.lstrip("> "))[0].text_node_to_html_node(), None))
         if blockType == "unsorted list":
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentSplittedBlock in splitBlock:
-                childrenList.append(LeafNode("li", text_to_textnodes(currentSplittedBlock.lstrip("-* ")), None))
+                childrenList.append(LeafNode("li", (text_to_textnodes(currentSplittedBlock.lstrip("-* ")))[0].text_node_to_html_node(), None))
             childrenNode = ParentNode("ul", None, [])
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
@@ -71,12 +71,13 @@ def markdown_to_html_node(markdown):
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentBlockIndex in range(0, len(splitBlock)):
-                childrenList.append(LeafNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1}. "))))
+                childrenList.append(LeafNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1}. "))[0].text_node_to_html_node()))
             childrenNode = ParentNode("ol", None, [])
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
         if blockType == "normal":
-            divNode.add_child(LeafNode("p", text_to_textnodes(currentBlock), None))
+            if currentBlock:
+                divNode.add_child(LeafNode("p", text_to_textnodes(currentBlock)[0].text_node_to_html_node(), None))
     print(node_clean_up(divNode))
     return divNode
 def text_to_children(text):

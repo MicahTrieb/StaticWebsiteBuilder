@@ -23,13 +23,12 @@ def generate_page(from_path, template_path, dest_path):
     openTemplate.close()
     template = template.replace("{{ Title }}", extract_title(readingDirectory))
     template = template.replace("{{ Content }}", markdown_to_html_node("".join(list(readingDirectory.lstrip(f"# {extract_title(readingDirectory)} ")))).to_html())
-    print(template)
-    #directory_copy(from_path, dest_path)
-    #(markdown_to_html_node("".join(list(readingDirectory)))).to_html()
-    
-    #newTemplate = newTemplate.replace("{{ Content }}", node_clean_up(formattedContents))
-    #for i in formattedContents.children:
-        #print (i)
-    
-    #print (extract_title(readingDirectory))
-    #markdown_to_html_node(readingDirectory.lstrip("b'"))
+    #directory_copy("/home/mici/gitHub/MicahsProjects/staticWebsite/static", "/home/mici/gitHub/MicahsProjects/staticWebsite/public")
+    if os.path.exists("/home/mici/gitHub/MicahsProjects/staticWebsite/temp"):
+        shutil.rmtree("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
+    os.mkdir("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
+    tempDirectory = "/home/mici/gitHub/MicahsProjects/staticWebsite/temp/template"
+    with open(tempDirectory, "w") as temp_file:
+        temp_file.write(template)
+    directory_copy("/home/mici/gitHub/MicahsProjects/staticWebsite/temp", dest_path)
+    shutil.rmtree("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
