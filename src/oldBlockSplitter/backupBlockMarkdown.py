@@ -42,9 +42,9 @@ def block_to_blocktype(inputBlock):
     return "normal"
 
 def markdown_to_html_node(markdown):
-    divNode = ParentNode("div", [], None)
+    divNode = HTMLNode("div", [], None)
     allBlocks = markdown_to_blocks(markdown)
-    #print(allBlocks)
+    print(allBlocks)
     #return "Stop code here debug line"
     appendingBlockList = []
     for currentBlock in allBlocks:
@@ -52,31 +52,31 @@ def markdown_to_html_node(markdown):
         blockType = block_to_blocktype(currentBlock)
         if blockType == "header":
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
-            divNode.add_child(LeafNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# ")), None))
+            divNode.add_child(HTMLNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# ")), None))
         if blockType == "code":
-            childrenNode = ParentNode("pre", None, [])
-            childrenNode.add_child(LeafNode("code", text_to_textnodes(currentBlock.strip("`")), None))
+            childrenNode = HTMLNode("pre", None, [], None)
+            childrenNode.add_child(HTMLNode("code", text_to_textnodes(currentBlock.strip("`")), None))
             divNode.add_child(childrenNode)
         if blockType == "quote block":
-            divNode.add_child(LeafNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
+            divNode.add_child(HTMLNode("blockquote", text_to_textnodes(currentBlock.lstrip("> ")), None))
         if blockType == "unsorted list":
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentSplittedBlock in splitBlock:
-                childrenList.append(LeafNode("li", text_to_textnodes(currentSplittedBlock.lstrip("-* ")), None))
-            childrenNode = ParentNode("ul", None, [])
+                childrenList.append(HTMLNode("li", text_to_textnodes(currentSplittedBlock.lstrip("-* ")), None))
+            childrenNode = HTMLNode("ul", None, [], None)
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
         if blockType == "sorted list":
             splitBlock = currentBlock.split("\n")
             childrenList = []
             for currentBlockIndex in range(0, len(splitBlock)):
-                childrenList.append(LeafNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1}. "))))
-            childrenNode = ParentNode("ol", None, [])
+                childrenList.append(HTMLNode("li", text_to_textnodes(splitBlock[currentBlockIndex].lstrip(f"{currentBlockIndex + 1}. "))))
+            childrenNode = HTMLNode("ol", None, [], None)
             childrenNode.add_child(childrenList)
             divNode.add_child(childrenNode)
         if blockType == "normal":
-            divNode.add_child(LeafNode("p", text_to_textnodes(currentBlock), None))
+            divNode.add_child(HTMLNode("p", text_to_textnodes(currentBlock), None))
     print(node_clean_up(divNode))
     return divNode
 def text_to_children(text):

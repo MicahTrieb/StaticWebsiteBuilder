@@ -2,7 +2,7 @@
 import re
 
 def extract_title(markdown):
-    brokenFile = markdown.split("\\n")
+    brokenFile = markdown.split("\n")
     counter = 0
     firstHeader = ""
     for currentLine in brokenFile:
