@@ -44,6 +44,8 @@ def block_to_blocktype(inputBlock):
 def markdown_to_html_node(markdown):
     divNode = HTMLNode("div", None, [], None)
     allBlocks = markdown_to_blocks(markdown)
+    print(allBlocks)
+    return "Hi"
     appendingBlockList = []
     for currentBlock in allBlocks:
         #print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
