@@ -7,6 +7,7 @@ from extracttitle import extract_title
 from directorycopy import *
 from pagegenerator import generate_page
 from blockmarkdown import *
+from blocksplitter import text_to_textnodes
 
 
 
@@ -32,7 +33,7 @@ class TestParentNode(unittest.TestCase):
         #print(markdown_to_html_node(headerText))
     def test_italics_in_stuff(self):
         testString = "# This is a header \n\n* This is an unsorted\n* List with an *italics*\n* in it"
-        print(markdown_to_html_node(testString))
+        print(text_to_textnodes("* List with an *italics*\n".lstrip("-* ")))
 if __name__ == "__main__":
     unittest.main()
 
