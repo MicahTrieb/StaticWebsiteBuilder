@@ -21,13 +21,15 @@ def generate_page(from_path, template_path, dest_path):
     openTemplate = open(template_path, "r")
     template = openTemplate.read()
     openTemplate.close()
+    print(template)
     template = template.replace("{{ Title }}", extract_title(readingDirectory))
-    template = template.replace("{{ Content }}", markdown_to_html_node("".join(list(readingDirectory.lstrip(f"# {extract_title(readingDirectory)} ")))).to_html())
+    template = template.replace("{{ Content }}", markdown_to_html_node("".join(list(readingDirectory))).to_html())
+    print(template)
     #directory_copy("/home/mici/gitHub/MicahsProjects/staticWebsite/static", "/home/mici/gitHub/MicahsProjects/staticWebsite/public")
     if os.path.exists("/home/mici/gitHub/MicahsProjects/staticWebsite/temp"):
         shutil.rmtree("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
     os.mkdir("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
-    tempDirectory = "/home/mici/gitHub/MicahsProjects/staticWebsite/temp/template"
+    tempDirectory = "/home/mici/gitHub/MicahsProjects/staticWebsite/temp/index.html"
     with open(tempDirectory, "w") as temp_file:
         temp_file.write(template)
     directory_copy("/home/mici/gitHub/MicahsProjects/staticWebsite/temp", dest_path)

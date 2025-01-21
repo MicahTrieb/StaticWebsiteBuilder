@@ -78,7 +78,7 @@ def markdown_to_html_node(markdown):
         if blockType == "normal":
             if currentBlock:
                 divNode.add_child(LeafNode("p", text_to_textnodes(currentBlock)[0].text_node_to_html_node(), None))
-    print(node_clean_up(divNode))
+    #print(node_clean_up(divNode))
     return divNode
 def text_to_children(text):
     nodes = []

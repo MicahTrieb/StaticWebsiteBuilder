@@ -72,7 +72,7 @@ class ParentNode(HTMLNode):
 				raise ValueError("A tag is required for parent nodes")
 			if self.children == None or not isinstance(self.children,list) or self.children == []:
 				raise ValueError("Children are required for every parent node and must be a list")
-			print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE")
+			#print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE")
 			for currentChild in self.children:
 				if  currentChild.children:
 					#print(f"ParentNode initialized: props={self.props} (type: {type(self.props)}) THREE - 1-1")

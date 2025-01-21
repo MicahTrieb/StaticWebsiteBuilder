@@ -10,8 +10,6 @@ def directory_copy(movingDirectory, targetDirectory):
         os.mkdir(targetDirectory)
         copying_function(movingDirectory, targetDirectory)
     else:
-        shutil.rmtree(targetDirectory)
-        os.mkdir(targetDirectory)
         copying_function(movingDirectory, targetDirectory)
     
 def copying_function(movingDirectory, targetDirectory):
