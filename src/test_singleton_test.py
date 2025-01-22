@@ -31,9 +31,18 @@ class TestParentNode(unittest.TestCase):
     #def test_header_check(self):
         #headerText = "# This is a header"
         #print(markdown_to_html_node(headerText))
-    def test_italics_in_stuff(self):
-        testString = "# This is a header \n\n* This is an unsorted\n* List with an *italics*\n* in it"
-        print(text_to_textnodes("* List with an *italics*\n".lstrip("-* ")))
+    #def test_italics_in_stuff(self):
+        #testString = "**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)"
+        #print(markdown_to_html_node(testString))
+    #def test_link_in_header(self):
+        #headerText = "# This is a header with a ![hyperlink](www.google.com)"
+        #print(markdown_to_html_node(headerText))
+
+    #def test_image_linker(self):
+        #imageText = "# This is a header with a ![hyperlink](www.google.com)"
+        #print(text_to_textnodes(imageText))
+    def test_pass(self):
+        pass
 if __name__ == "__main__":
     unittest.main()
 

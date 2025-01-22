@@ -40,18 +40,24 @@ def split_nodes_image(old_nodes):
         imageExistenceCheck = re.findall(r"\!\[([^\]]+)\]\([^\)]+\)", currentNode.text)
         if not preImageRegexed and not imageExistenceCheck:
             returnList.append(currentNode)
+            #print(f"Continuing here with {currentNode}")
             continue
-        splitImageText = re.split(r"!\[[^\)]+\)")
+        #print(f"Pre Image Regex here: {preImageRegexed}\nImage Exists here: {imageExistenceCheck}\n")
+        splitImageText = re.split(r"!\[([^\)]+)\)",currentNode.text)
+        #print (f"split Image Text Here: {splitImageText} with Node {currentNode} containing {currentNode.text}")
         for currentIndex in range(0, len(splitImageText)):
             if currentIndex == 0 or currentIndex == len(splitImageText) - 1:
                 if splitImageText[currentIndex] == "":
-                    continue  
+                    #print(f"Empty index detected at {[currentIndex]}")
+                    continue
             if currentIndex % 2 == 0:
+                #print(f"Normal texttype detected here: {splitImageText[currentIndex]}")
                 textList.extend([
                     TextNode(splitImageText[currentIndex], TextType.NORMAL)
                 ])
             else:
-                imageRegex = re.findall(r"!\[[^\]]+)\]\(([^\)]+)\)")
+                imageRegex = re.findall(r"!\[([^\]]+)\]\(([^\)]+)\)",currentNode.text)
+                #print(f"Image Regex Here: {imageRegex}")
                 textList.extend([
                     TextNode(imageRegex[0][0], TextType.IMAGES, imageRegex[0][1])
                 ])       
