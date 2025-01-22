@@ -31,9 +31,9 @@ class TestParentNode(unittest.TestCase):
     #def test_header_check(self):
         #headerText = "# This is a header"
         #print(markdown_to_html_node(headerText))
-    #def test_italics_in_stuff(self):
-        #testString = "**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)"
-        #print(markdown_to_html_node(testString))
+    def test_italics_in_stuff(self):
+        testString = "**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)"
+        print(f"return string here: {markdown_to_html_node(testString)}")
     #def test_link_in_header(self):
         #headerText = "# This is a header with a ![hyperlink](www.google.com)"
         #print(markdown_to_html_node(headerText))

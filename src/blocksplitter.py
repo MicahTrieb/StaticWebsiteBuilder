@@ -36,6 +36,7 @@ def split_nodes_image(old_nodes):
     returnList = []
     textList = []
     for currentNode in old_nodes:
+        print(f"Current Node here: {currentNode}")
         preImageRegexed = re.findall(r"(^.+)(?=\!\[[^\]]+\]\([^\)]+\))", currentNode.text)
         imageExistenceCheck = re.findall(r"\!\[([^\]]+)\]\([^\)]+\)", currentNode.text)
         if not preImageRegexed and not imageExistenceCheck:

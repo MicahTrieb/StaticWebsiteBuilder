@@ -45,8 +45,8 @@ def markdown_to_html_node(markdown):
     divNode = ParentNode("div", [], None)
     allBlocks = markdown_to_blocks(markdown)
     for currentBlock in allBlocks:
-        print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
-        print(allBlocks)
+        #print (f"DEBUG TEXT TO TEXTNODE HERE: {text_to_textnodes(currentBlock)}")
+        #print(allBlocks)
         blockType = block_to_blocktype(currentBlock)
         splitBlock = currentBlock.split("\n")
         textNodeList = []
@@ -63,23 +63,79 @@ def markdown_to_html_node(markdown):
                             textNodeList.append(currentNode.text.lstrip("# "))
                         else:
                             textNodeList.append(currentNode.text_node_to_html_node().lstrip("# "))
-                combinedList = "".join(textNodeList)
-                divNode.add_child(LeafNode(f"h{headingNumber}", combinedList))
+                    combinedList = "".join(textNodeList)
+                    divNode.add_child(LeafNode(f"h{headingNumber}", combinedList))
 
         if blockType == "code":
             childrenNode = ParentNode("pre", None, [])
             childrenNode.add_child(LeafNode("code", text_to_textnodes(currentBlock.strip("`"))[0].text_node_to_html_node(), None))
             divNode.add_child(childrenNode)           
         if blockType == "unsorted list":
-            for currentIndex in splitBlock:
-                childrenToNodes = text_to_textnodes(currentIndex.lsplit("*- "))
-
+            textNodeList = []
+            childrenList = []
+            for currentIndex in range(0, len(splitBlock)):
+                childrenToNodes = text_to_textnodes(splitBlock[currentIndex].lstrip("-* "))
+                if len(childrenToNodes) == 1:
+                    childrenList.append(LeafNode("li",childrenToNodes[0].text_node_to_html_node(), None))
+                elif len(childrenToNodes) > 1:
+                    for currentNode in childrenToNodes:
+                        if currentNode.text_type == TextType.NORMAL:
+                            textNodeList.append(currentNode.text)
+                        else:
+                            textNodeList.append(currentNode.text_node_to_html_node())
+                    combinedList = "".join(textNodeList)
+                    childrenList.append(LeafNode("li", combinedList,None))
+            childrenNode = ParentNode("ul", None, [])
+            childrenNode.add_child(childrenList)
+            divNode.add_child(childrenNode)
+                    
         if blockType == "sorted list":
-            pass
+            textNodeList = []
+            childrenList = []
+            for currentIndex in range(0, len(splitBlock)):
+                childrenToNodes = text_to_textnodes(splitBlock[currentIndex].lstrip(f"{currentIndex + 1}. "))
+                if len(childrenToNodes) == 1:
+                    childrenList.append(LeafNode("li", childrenToNodes[0].text_node_to_html_node()))
+                elif len(childrenToNodes) > 1:
+                    for currentNode in childrenToNodes:
+                        if currentNode.text_type == TextType.NORMAL:
+                            textNodeList.append(currentNode.text)
+                        else:
+                            textNodeList.append(currentNode.text_node_to_html_node())
+                    combinedList = "".join(textNodeList)
+                    childrenList.append(LeafNode("li", combinedList,None))
+            childrenNode = ParentNode("ol", None, [])
+            childrenNode.add_child(childrenList)
+            divNode.add_child(childrenNode)
         if blockType == "quote block":
-            pass
+            textNodeList = []
+            for currentIndex in splitBlock:
+                childrenToNodes = text_to_textnodes(currentIndex.lstrip("> "))
+                if len(childrenToNodes) == 1:
+                    divNode.add_child(LeafNode("blockquote", currentIndex.lstrip("> ")))
+                elif(len(childrenToNodes) > 1):
+                    for currentIndex in childrenToNodes:
+                        if currentIndex.text_type == TextType.NORMAL:
+                            textNodeList.append(currentIndex.text)
+                        else:
+                            textNodeList.append(currentIndex.text_node_to_html_node())
+                    combinedList = "".join(textNodeList)
+                    divNode.add_child(LeafNode("blockquote", combinedList))                             
         if blockType == "normal":
-            pass
+            textNodeList = []
+            for currentIndex in splitBlock:
+                childrenToNodes = text_to_textnodes(currentIndex)
+                if len(childrenToNodes) == 1:
+                    divNode.add_child(LeafNode("p", currentBlock.text))
+                elif(len(childrenToNodes) > 1):
+                    for currentIndex in childrenToNodes:
+                        if currentIndex.text_type == TextType.NORMAL:
+                            textNodeList.append(currentIndex.text)
+                        else:
+                            textNodeList.append(currentIndex.text_node_to_html_node())
+                    combinedList = "".join(textNodeList)
+                    divNode.add_child(LeafNode("p", combinedList))
+
     return(divNode)
 def text_to_children(text):
     nodes = []
