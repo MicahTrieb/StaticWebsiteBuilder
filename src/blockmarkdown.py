@@ -74,7 +74,10 @@ def markdown_to_html_node(markdown):
             textNodeList = []
             childrenList = []
             for currentIndex in range(0, len(splitBlock)):
-                childrenToNodes = text_to_textnodes(splitBlock[currentIndex].lstrip("-* "))
+                if re.findall(r"(^- )", splitBlock[currentIndex]):
+                    childrenToNodes = text_to_textnodes(splitBlock[currentIndex].lstrip("- "))
+                elif re.findall(r"(^\* )", splitBlock[currentIndex]):
+                    childrenToNodes = text_to_textnodes(splitBlock[currentIndex].lstrip("* "))
                 if len(childrenToNodes) == 1:
                     childrenList.append(LeafNode("li",childrenToNodes[0].text_node_to_html_node(), None))
                 elif len(childrenToNodes) > 1:
@@ -126,7 +129,7 @@ def markdown_to_html_node(markdown):
             for currentIndex in splitBlock:
                 childrenToNodes = text_to_textnodes(currentIndex)
                 if len(childrenToNodes) == 1:
-                    divNode.add_child(LeafNode("p", currentBlock.text))
+                    divNode.add_child(LeafNode("p", currentIndex))
                 elif(len(childrenToNodes) > 1):
                     for currentIndex in childrenToNodes:
                         if currentIndex.text_type == TextType.NORMAL:
