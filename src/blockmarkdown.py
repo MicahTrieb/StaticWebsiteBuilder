@@ -54,29 +54,33 @@ def markdown_to_html_node(markdown):
             headingNumber = (len(list(re.findall(r"^(#+)",currentBlock))[0]))
             for currentIndex in splitBlock:
                 childrenToNodes = text_to_textnodes(currentIndex.lstrip("# "))
-            if len(childrenToNodes) == 1:
-                divNode.add_child(LeafNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# "))[0].text_node_to_html_node(), None))
-                continue
-            elif len(childrenToNodes) > 1:
-                for currentNode in childrenToNodes:
-                    if currentNode.text_type == TextType.NORMAL:
-                        textNodeList.append(currentNode.text.lstrip("# "))
-                    else:
-                        textNodeList.append(currentNode.text_node_to_html_node().lstrip("# "))
-            combinedList = "".join(textNodeList)
-            divNode.add_child(LeafNode(f"h{headingNumber}", combinedList))
+                if len(childrenToNodes) == 1:
+                    divNode.add_child(LeafNode(f"h{headingNumber}", text_to_textnodes(currentBlock.lstrip("# "))[0].text_node_to_html_node(), None))
+                    continue
+                elif len(childrenToNodes) > 1:
+                    for currentNode in childrenToNodes:
+                        if currentNode.text_type == TextType.NORMAL:
+                            textNodeList.append(currentNode.text.lstrip("# "))
+                        else:
+                            textNodeList.append(currentNode.text_node_to_html_node().lstrip("# "))
+                combinedList = "".join(textNodeList)
+                divNode.add_child(LeafNode(f"h{headingNumber}", combinedList))
 
         if blockType == "code":
-            pass
+            childrenNode = ParentNode("pre", None, [])
+            childrenNode.add_child(LeafNode("code", text_to_textnodes(currentBlock.strip("`"))[0].text_node_to_html_node(), None))
+            divNode.add_child(childrenNode)           
         if blockType == "unsorted list":
-            pass
+            for currentIndex in splitBlock:
+                childrenToNodes = text_to_textnodes(currentIndex.lsplit("*- "))
+
         if blockType == "sorted list":
             pass
         if blockType == "quote block":
             pass
         if blockType == "normal":
             pass
-        return(divNode)
+    return(divNode)
 def text_to_children(text):
     nodes = []
     currentTextNodes = (text_to_textnodes(text))
