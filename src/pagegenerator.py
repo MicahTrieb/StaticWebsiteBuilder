@@ -30,7 +30,7 @@ def generate_page(from_path, template_path, dest_path):
     if os.path.exists("/home/mici/gitHub/MicahsProjects/staticWebsite/temp"):
         shutil.rmtree("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
     os.mkdir("/home/mici/gitHub/MicahsProjects/staticWebsite/temp")
-    tempDirectory = "/home/mici/gitHub/MicahsProjects/staticWebsite/temp/index.md"
+    tempDirectory = "/home/mici/gitHub/MicahsProjects/staticWebsite/temp/index.html"
     with open(tempDirectory, "w") as temp_file:
         temp_file.write(template)
     directory_copy("/home/mici/gitHub/MicahsProjects/staticWebsite/temp", dest_path)
@@ -40,11 +40,14 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     truePath = Path(dir_path_content)
     files = truePath.rglob('*.md')
     for currentFile in files:
-        print (currentFile.parent)
+        #print (currentFile.parent)
         if currentFile.parent == truePath:
             generate_page(currentFile,template_path, dest_dir_path)
         else:
             lengthOfParts = len(currentFile.parts) - 2
             newDestination = truePath.joinpath(dest_dir_path, currentFile.parts[lengthOfParts])
-            Path.mkdir(newDestination)
+            Path.mkdir(newDestination, exist_ok=True)
+            print(f"Source file: {currentFile}")
+            print(f"Destination: {newDestination}")
+
             generate_page(currentFile, template_path, newDestination)
