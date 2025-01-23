@@ -14,7 +14,7 @@ def directory_copy(movingDirectory, targetDirectory):
     
 def copying_function(movingDirectory, targetDirectory):
     listToBeCopied = os.listdir(movingDirectory)
-    #print(f"Full directory list: {listToBeCopied}")
+    print(f"Full directory list: {listToBeCopied}")
     for currentDirectory in listToBeCopied:
         #print(f"Current directory: {currentDirectory}")
         copyingThis = os.path.join(movingDirectory, currentDirectory)
